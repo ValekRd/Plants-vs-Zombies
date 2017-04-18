@@ -204,7 +204,7 @@ int main()
             }
             
             //...create sunflower
-            if (Sun::score >= 50 && mousePosition.x > 305 && mousePosition.x < 346 && mousePosition.y > 9 && mousePosition.y < 69)
+            if (Sun::score >= 50 && mousePosition.x > 305 && mousePosition.x < 346 && mousePosition.y > 9 && mousePosition.y < 69 && Sunflower::status == 2)   // fixed 18.04.17
             {
                 Sunflower sunflower;
                 Sunflower::status = 1;
@@ -217,6 +217,8 @@ int main()
                 Sunflower::last_create_time = time.asSeconds();
             }
         }
+        
+        std::cout << Sunflower::count << std::endl;
         
         if (Sunflower::status == 1)
         {
@@ -286,15 +288,15 @@ int main()
         {
             for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
             {
-                i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
-                if (i->number_of_frame < 59)
-                {
-                    i->number_of_frame++;
-                }
-                else
-                {
-                    i->number_of_frame -= 59;
-                }
+                    i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
+                    if (i->number_of_frame < 59)
+                    {
+                        i->number_of_frame++;
+                    }
+                    else
+                    {
+                        i->number_of_frame -= 59;
+                    }
                 
             }
         }
@@ -302,15 +304,16 @@ int main()
         {
             for (auto i = sunflowers.begin(); i != sunflowers.end() - 1; i++)
             {
-                i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
-                if (i->number_of_frame < 59)
-                {
-                    i->number_of_frame++;
-                }
-                else
-                {
-                    i->number_of_frame -= 59;
-                }
+                    i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
+                    if (i->number_of_frame < 59)
+                    {
+                        i->number_of_frame++;
+                    }
+                    else
+                    {
+                        i->number_of_frame -= 59;
+                    }
+                
             }
         }
         
@@ -320,8 +323,8 @@ int main()
             window.draw(i->sprite);
         }		  
         
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        std::cout << mousePosition.x << "  " << mousePosition.y << std::endl;
+        //sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        //std::cout << mousePosition.x << "  " << mousePosition.y << std::endl;
         //std::cout << time.asSeconds() << std::endl;
         //std::cout << Sunflower::count << std::endl;
         
