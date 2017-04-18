@@ -7,7 +7,7 @@
 
 
 float Sunflower::last_create_time = 0;
-int Sun::score = 10000;
+int Sun::score = 0;
 float Sun::last_create_time = 0;
 int Sun::count = 0;
 int Sunflower::health = 100;
