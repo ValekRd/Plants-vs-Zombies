@@ -210,6 +210,7 @@ int main()
                 Sunflower::status = 1;
                 sunflower.sprite.setTexture(sunflower_frames[0].texture);
                 sunflower.number_of_frame = 0;
+                sunflower.last_update_time = 0;
                 sunflower.sprite.setScale(0.75f, 0.75f);
                 sunflowers.push_back(sunflower);
                 Sunflower::count++;
@@ -218,7 +219,6 @@ int main()
             }
         }
         
-        std::cout << Sunflower::count << std::endl;
         
         if (Sunflower::status == 1)
         {
@@ -288,6 +288,8 @@ int main()
         {
             for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
             {
+                if(time.asSeconds() - i->last_update_time > 0.02)                               //fixed it 18.04.17
+                {
                     i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
                     if (i->number_of_frame < 59)
                     {
@@ -297,6 +299,8 @@ int main()
                     {
                         i->number_of_frame -= 59;
                     }
+                    i->last_update_time = time.asSeconds();
+                }
                 
             }
         }
@@ -304,6 +308,8 @@ int main()
         {
             for (auto i = sunflowers.begin(); i != sunflowers.end() - 1; i++)
             {
+                if(time.asSeconds() - i->last_update_time > 0.02)                               //fixed it 18.04.17
+                {
                     i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
                     if (i->number_of_frame < 59)
                     {
@@ -313,7 +319,8 @@ int main()
                     {
                         i->number_of_frame -= 59;
                     }
-                
+                    i->last_update_time = time.asSeconds();
+                }
             }
         }
         

@@ -60,6 +60,7 @@ public:
     static int status;
     static float last_create_time;
     int number_of_frame;
+    float last_update_time;
     float last_create_sun_time;
     float planting_time;
     
