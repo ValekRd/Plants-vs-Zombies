@@ -73,11 +73,19 @@ public:
 class Sunflower_frames : public Object
 {};
 
+class Zombie_frames : public Object
+{};
+
 class Zombie : public Object
 {
 public:
     sf::Vector2f velocity;
     int health;
+    static int count;
+    float create_time;
+    static float last_create_time;
+    int number_of_frame;
+    float last_update_time;
     
     Zombie()
     {}
