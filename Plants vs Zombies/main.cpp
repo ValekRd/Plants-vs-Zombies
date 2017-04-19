@@ -6,13 +6,6 @@
 #include <string>
 
 
-
-
-int Sun::score = 0;
-float Sun::last_create_time = 0;
-int Sun::count = 0;
-
-
 float Sunflower::last_create_time = 0;
 int Sunflower::health = 100;
 int Sunflower::count = 0;
@@ -137,6 +130,11 @@ int main()
     sunflower_frames[57].texture.loadFromFile("sun/57.png");
     sunflower_frames[58].texture.loadFromFile("sun/58.png");
     sunflower_frames[59].texture.loadFromFile("sun/59.png");
+    
+    /*
+     FITIT: замените этот копипаст строчек на цикл.
+     std::to_string(i) переводит число в строку
+     */
     
     for (int i = 0; i < 60; i++)
     {
@@ -473,7 +471,7 @@ int main()
                 Sun::score -= 100;
                 Peas::last_create_time = time.asSeconds();
             }
-
+            
         }
         
         
@@ -516,7 +514,7 @@ int main()
                 Peas::status = 2;
             }
         }
-
+        
         
         //create sunflower's stars
         if (Sunflower::status == 2)
@@ -658,7 +656,7 @@ int main()
                             bul.create_time = time.asSeconds();
                             bullets.push_back(bul);
                         }
-
+                        
                     }
                     else
                     {
@@ -681,21 +679,21 @@ int main()
         //update frames of zombie
         for (auto i = zombies.begin(); i != zombies.end(); i++)
         {
-                if(time.asSeconds() - i->last_update_time > 0.2)
+            if(time.asSeconds() - i->last_update_time > 0.2)
+            {
+                i->sprite.setTexture(zombie_frames[i->number_of_frame].texture);
+                if (i->number_of_frame < 92)
                 {
-                    i->sprite.setTexture(zombie_frames[i->number_of_frame].texture);
-                    if (i->number_of_frame < 92)
-                    {
-                        i->number_of_frame++;
-                    }
-                    else
-                    {
-                        i->number_of_frame -= 92;
-                    }
-                    i->last_update_time = time.asSeconds();
+                    i->number_of_frame++;
                 }
+                else
+                {
+                    i->number_of_frame -= 92;
+                }
+                i->last_update_time = time.asSeconds();
+            }
         }
-
+        
         
         //draw sunflowers
         for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
@@ -745,7 +743,7 @@ int main()
             numbers[0].sprite.setPosition(259, 61);
             window.draw(numbers[0].sprite);
         }
-        //check third number  
+        //check third number
         for (int i = 1; i < 10; i++)
         {
             if (Sun::score % 1000 / 100 == i)
