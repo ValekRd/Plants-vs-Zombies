@@ -76,6 +76,26 @@ class Sunflower_frames : public Object
 class Zombie_frames : public Object
 {};
 
+class Peas_frames : public Object
+{};
+
+class Peas : public Plans
+{
+public:
+    static int health;
+    static int count;
+    static int status;
+    static float last_create_time;
+    int number_of_frame;
+    float last_update_time;
+    float planting_time;
+    
+    Peas()
+    {
+        
+    }
+};
+
 class Zombie : public Object
 {
 public:
@@ -89,4 +109,10 @@ public:
     
     Zombie()
     {}
+};
+
+class Bullet : public Object
+{
+public:
+    int create_time;
 };
