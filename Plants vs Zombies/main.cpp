@@ -131,6 +131,11 @@ int main()
     sunflower_frames[58].texture.loadFromFile("sun/58.png");
     sunflower_frames[59].texture.loadFromFile("sun/59.png");
     
+    /*
+    FITIT: замените этот копипаст строчек на цикл.
+    std::to_string(i) переводит число в строку
+    */
+    
     for (int i = 0; i < 60; i++)
     {
         sunflower_frames[i].sprite.setTexture(sunflower_frames[i].texture);
