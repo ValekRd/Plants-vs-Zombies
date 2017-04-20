@@ -296,7 +296,7 @@ int main()
         
         
         //create sunflower's stars
-        /*if (Sunflower::status == 2)
+        if (Sunflower::status == 2)
         {
             for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
             {
@@ -333,7 +333,7 @@ int main()
                     Sun::count++;
                 }
             }
-        }*/
+        }
         
         
         //update frames of sunflowers
@@ -449,11 +449,8 @@ int main()
         //update bullets
         for(auto i = bullets.begin(); i != bullets.end(); i++)
         {
-            /*if()
-            {
                 sf::Vector2f current_point = i->sprite.getPosition();
                 i->sprite.setPosition(current_point.x + 1, current_point.y);
-            }*/
         }
         
         
