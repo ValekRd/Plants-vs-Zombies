@@ -53,12 +53,9 @@ int main()
     std::vector<Number> numbers(10);
     for(int i = 0; i < 10; i++)
     {
-        std::string string = std::to_string(i);
-        string = "numbers/" + string + ".png";
-        numbers[i].texture.loadFromFile(string);
-    }
-    for (int i = 0; i < 10; i++)
-    {
+        std::string path = std::to_string(i);
+        path = "numbers/" + path + ".png";
+        numbers[i].texture.loadFromFile(path);
         numbers[i].sprite.setTexture(numbers[i].texture);
     }
     
@@ -67,9 +64,9 @@ int main()
     std::vector<Sunflower_frames> sunflower_frames(60);
     for(int i = 0; i < 60; i++)
     {
-        std::string string = std::to_string(i);
-        string = "sun/" + string + ".png";
-        sunflower_frames[i].texture.loadFromFile(string);
+        std::string path = std::to_string(i);
+        path = "sun/" + path + ".png";
+        sunflower_frames[i].texture.loadFromFile(path);
     }
     
     
@@ -77,9 +74,9 @@ int main()
     std::vector<Zombie_frames> zombie_frames(93);
     for(int i = 0; i < 93; i++)
     {
-        std::string string = std::to_string(i);
-        string = "zombie/" + string + ".png";
-        zombie_frames[i].texture.loadFromFile(string);
+        std::string path = std::to_string(i);
+        path = "zombie/" + path + ".png";
+        zombie_frames[i].texture.loadFromFile(path);
     }
     
     
@@ -87,9 +84,9 @@ int main()
     std::vector<Peas_frames> peas_frames(60);
     for(int i = 0; i < 60; i++)
     {
-        std::string string = std::to_string(i);
-        string = "peas/" + string + ".png";
-        peas_frames[i].texture.loadFromFile(string);
+        std::string path = std::to_string(i);
+        path = "peas/" + path + ".png";
+        peas_frames[i].texture.loadFromFile(path);
     }
     
     
