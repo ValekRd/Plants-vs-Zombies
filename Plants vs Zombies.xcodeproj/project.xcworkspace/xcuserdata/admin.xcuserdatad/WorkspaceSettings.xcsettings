@@ -5,11 +5,11 @@
 	<key>BuildLocationStyle</key>
 	<string>CustomLocation</string>
 	<key>CustomBuildIntermediatesPath</key>
-	<string>/Users/admin/GitHub/Plants vs Zombies/Plants vs Zombies/Build/Intermediates</string>
+	<string>/Users/admin/GitHub/Plants-vs-Zombies/Plants vs Zombies/Build/Intermediates</string>
 	<key>CustomBuildLocationType</key>
 	<string>Absolute</string>
 	<key>CustomBuildProductsPath</key>
-	<string>/Users/admin/GitHub/Plants vs Zombies/Plants vs Zombies/Build/Products</string>
+	<string>/Users/admin/GitHub/Plants-vs-Zombies/Plants vs Zombies/Build/Products</string>
 	<key>DerivedDataLocationStyle</key>
 	<string>Default</string>
 	<key>IssueFilterStyle</key>

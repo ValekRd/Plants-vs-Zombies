@@ -1,5 +1,5 @@
 dependencies: \
-  /Users/admin/GitHub/Plants\ vs\ Zombies/Plants\ vs\ Zombies/Objects.cpp \
+  /Users/admin/GitHub/Plants-vs-Zombies/Plants\ vs\ Zombies/Objects.cpp \
   /Library/Frameworks/SFML.framework/Headers/Graphics.hpp \
   /Library/Frameworks/SFML.framework/Headers/Window.hpp \
   /Library/Frameworks/SFML.framework/Headers/System.hpp \

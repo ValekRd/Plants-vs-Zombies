@@ -11,7 +11,7 @@ int Sunflower::health = 100;
 int Sunflower::count = 0;
 int Sunflower::status = 2;
 
-int Sun::score = 0;
+int Sun::score = 1000;
 float Sun::last_create_time = 0;
 int Sun::count = 0;
 
@@ -312,29 +312,12 @@ int main()
                     stars.push_back(sun);
                     i->last_create_sun_time = time.asSeconds();
                     Sun::count++;
+                    
+                    if(Sunflower::status ==  1 && i == (sunflowers.end() - 2))
+                        break;
                 }
             }
         }
-        else
-        {
-            for (auto i = sunflowers.begin(); i != (sunflowers.end() - 1); i++)
-            {
-                if (time.asSeconds() - i->last_create_sun_time > 10)
-                {
-                    Sun sun;
-                    sun.sprite.setTexture(sun_texture);
-                    sun.sprite.setScale(0.5f, 0.5f);
-                    sun.create_time = time.asSeconds();
-                    sun.whose_sun = 1;
-                    sf::Vector2f center_cun = i->sprite.getPosition();
-                    sun.sprite.setPosition(center_cun.x + 30, center_cun.y - 30);
-                    stars.push_back(sun);
-                    i->last_create_sun_time = time.asSeconds();
-                    Sun::count++;
-                }
-            }
-        }
-        
         
         //update frames of sunflowers
         if (Sunflower::status == 2)
@@ -353,30 +336,12 @@ int main()
                         i->number_of_frame -= 59;
                     }
                     i->last_update_time = time.asSeconds();
-                }
-                
-            }
-        }
-        else
-        {
-            for (auto i = sunflowers.begin(); i != sunflowers.end() - 1; i++)
-            {
-                if(time.asSeconds() - i->last_update_time > 0.02)
-                {
-                    i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
-                    if (i->number_of_frame < 59)
-                    {
-                        i->number_of_frame++;
-                    }
-                    else
-                    {
-                        i->number_of_frame -= 59;
-                    }
-                    i->last_update_time = time.asSeconds();
+                    
+                    if(Sunflower::status ==  1 && i == (sunflowers.end() - 2))
+                        break;
                 }
             }
         }
-        
         
         //update frames of peas and create bullets
         if (Peas::status == 2)
@@ -410,38 +375,8 @@ int main()
                     i->last_update_time = time.asSeconds();
                 }
                 
-            }
-        }
-        else
-        {
-            for (auto i = peases.begin(); i != peases.end() - 1; i++)
-            {
-                if(time.asSeconds() - i->last_update_time > 0.02)
-                {
-                    i->sprite.setTexture(peas_frames[i->number_of_frame].texture);
-                    if (i->number_of_frame < 59)
-                    {
-                        i->number_of_frame++;
-                        
-                        //create bullet
-                        if(i->number_of_frame == 33)
-                        {
-                            Bullet bul;
-                            bul.sprite.setTexture(bul_texture);
-                            bul.sprite.setScale(0.3f, 0.3f);
-                            sf::Vector2f center = i->sprite.getPosition();
-                            bul.sprite.setPosition(center.x + 55, center.y + 14);
-                            bul.create_time = time.asSeconds();
-                            bullets.push_back(bul);
-                        }
-                        
-                    }
-                    else
-                    {
-                        i->number_of_frame -= 59;
-                    }
-                    i->last_update_time = time.asSeconds();
-                }
+                if(Peas::status ==  1 && i == (peases.end() - 2))
+                    break;
             }
         }
         

@@ -280,6 +280,7 @@
 				84315A4B1EA60B2D00E56051 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
