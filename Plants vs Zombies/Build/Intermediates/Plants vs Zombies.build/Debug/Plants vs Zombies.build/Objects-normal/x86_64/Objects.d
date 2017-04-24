@@ -70,5 +70,4 @@ dependencies: \
   /Library/Frameworks/SFML.framework/Headers/Graphics/Glsl.hpp \
   /Library/Frameworks/SFML.framework/Headers/Graphics/Glsl.inl \
   /Library/Frameworks/SFML.framework/Headers/Graphics/Sprite.hpp \
-  /Library/Frameworks/SFML.framework/Headers/Graphics/Text.hpp \
-  /Users/admin/GitHub/Plants-vs-Zombies/Plants\ vs\ Zombies/Objects.h
+  /Library/Frameworks/SFML.framework/Headers/Graphics/Text.hpp
