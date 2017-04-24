@@ -11,7 +11,7 @@ int Sunflower::health = 100;
 int Sunflower::count = 0;
 int Sunflower::status = 2;
 
-int Sun::score = 1000;
+int Sun::score = 10000;
 float Sun::last_create_time = 0;
 int Sun::count = 0;
 
@@ -131,7 +131,7 @@ int main()
         
         
         //create new sun
-        if (time.asSeconds() - Sun::last_create_time > 10)
+        /*if (time.asSeconds() - Sun::last_create_time > 10)
         {
             Sun sun;
             sun.sprite.setTexture(sun_texture);
@@ -141,13 +141,13 @@ int main()
             Sun::last_create_time = time.asSeconds();
             sun.create_time = time.asSeconds();
             Sun::count++;
-        }
+        }*/
         
         
         //create new Zombie
         if (time.asSeconds() > free_from_zombies_time)
         {
-            if(time.asSeconds() - Zombie::last_create_time > 0.5)
+            if(time.asSeconds() - Zombie::last_create_time > 1)
             {
                 Zombie zomb;
                 zomb.sprite.setTexture(zombie_frames[0].texture);
@@ -233,7 +233,7 @@ int main()
                 Sunflower::last_create_time = time.asSeconds();
             }
             
-            //create peas
+            //...create peas
             if (Sun::score >= 100 && mousePosition.x > 352 && mousePosition.x < 394 && mousePosition.y > 9 && mousePosition.y < 69 && Peas::status == 2)
             {
                 Peas peas;
@@ -293,7 +293,7 @@ int main()
         
         
         //create sunflower's stars
-        if (Sunflower::status == 2)
+        /*if (Sunflower::status == 2)
         {
             for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
             {
@@ -314,7 +314,7 @@ int main()
                         break;
                 }
             }
-        }
+        }*/
         
         //update frames of sunflowers
         if (Sunflower::status == 2)
@@ -389,7 +389,7 @@ int main()
         //update frames of zombie
         for (auto i = zombies.begin(); i != zombies.end(); i++)
         {
-            if(time.asSeconds() - i->last_update_time > 0.2)
+            if(time.asSeconds() - i->last_update_time > 0.05)
             {
                 i->sprite.setTexture(zombie_frames[i->number_of_frame].texture);
                 if (i->number_of_frame < 92)

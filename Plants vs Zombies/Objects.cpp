@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include "Objects.h"
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -44,15 +45,15 @@ public:
     {}
 };
 
-class Plans : public Object
+class Plants : public Object
 {
 public:
     
-    Plans()
+    Plants()
     {}
 };
 
-class Sunflower : public Plans
+class Sunflower : public Plants
 {
 public:
     static int health;
@@ -79,7 +80,7 @@ class Zombie_frames : public Object
 class Peas_frames : public Object
 {};
 
-class Peas : public Plans
+class Peas : public Plants
 {
 public:
     static int health;

@@ -16,6 +16,7 @@
 		84315A381EA60B2C00E56051 /* Plants vs Zombies-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Plants vs Zombies-Info.plist"; sourceTree = "<group>"; };
 		84315A3C1EA60B2D00E56051 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		84315A4E1EA60F0E00E56051 /* Objects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Objects.cpp; sourceTree = "<group>"; };
+		84E9DFA51EAA174500165FCF /* Objects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Objects.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +51,7 @@
 			children = (
 				84315A3C1EA60B2D00E56051 /* main.cpp */,
 				84315A4E1EA60F0E00E56051 /* Objects.cpp */,
+				84E9DFA51EAA174500165FCF /* Objects.h */,
 				84315A371EA60B2C00E56051 /* Supporting Files */,
 			);
 			path = "Plants vs Zombies";
