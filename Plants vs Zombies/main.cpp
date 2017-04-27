@@ -21,7 +21,6 @@ int Zombie::count = 0;
 float Peas::last_create_time = 0;
 int Peas::status = 2;
 int Peas::count = 0;
-
 */
 
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType);
