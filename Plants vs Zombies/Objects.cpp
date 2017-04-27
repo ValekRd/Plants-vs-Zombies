@@ -8,26 +8,31 @@
 
 using namespace std;
 
-Object::Object(float x, float y, std::string filename, sf::Vector2f speed_)
+Object::Object(float x, float y, std::string filename, sf::Vector2f speed)
 {
-	this->image.loadFromFile("images/" + filename);
-	texture.loadFromImage(image);
+	texture.loadFromFile("images/" + filename);
 	sprite.setTexture(texture);
 	this->pos.x = x;
 	this->pos.y = y;
-	this->speed = speed_;
+	this->speed = speed;
 	sprite.setPosition(pos.x, pos.y);
 }
+
+
 void Object::update(float dt)
 {
 	pos += speed * dt;
 	sprite.setPosition(pos.x, pos.y);
 }
+
+
 Sun::Sun(float x, float y, std::string filename, sf::Vector2f speed, float CreateTime, int WhoseSun) : Object(x, y, filename, speed)
 {
 	this->createTime = CreateTime;
 	this->whoseSun = WhoseSun;
 }
+
+
 Zombie::Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime) : Object(x, y, filename, speed)
 {
 	this->createTime = createTime;
@@ -35,6 +40,8 @@ Zombie::Zombie(float x, float y, std::string filename, sf::Vector2f speed, float
 	this->numberOfFrame = 93;
 	this->lastUpdateTime = 0;
 };
+
+
 Sunflower::Sunflower(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)
 {
 	this->numberOfFrame = 0;
@@ -44,6 +51,8 @@ Sunflower::Sunflower(float x, float y, std::string filename, sf::Vector2f speed,
 	this->lastCreateSunTime = plantTime;
 	this->lastUpdateTime = plantTime;
 }
+
+
 Peas::Peas(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)
 {
 	this->numberOfFrame = 0;
@@ -52,6 +61,8 @@ Peas::Peas(float x, float y, std::string filename, sf::Vector2f speed, float pla
 	this->lastCreateTime = plantTime;
 	this->lastUpdateTime = plantTime;
 }
+
+
 Frame::Frame(string filename)
 {
 	this->texture.loadFromFile("images/" + filename);
@@ -59,7 +70,11 @@ Frame::Frame(string filename)
 	//this->sprite.setScale(0.3f, 0.3f);
 	//cout << "here" << endl;
 }
+
+
 static int x = 0;
+
+
 Frame::Frame()
 {
 	//cout << x << endl;
