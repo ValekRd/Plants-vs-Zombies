@@ -1,13 +1,13 @@
 //from src
-#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
-#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Ñonstants.h"
+#include "Objects.h"
+#include "Ð¡onstants.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <string>
 using namespace std;
-/* ×ÒÎ ÝÒÎ ÂÎÎÁÙÅ???
+/* â—Šâ€œÅ’ â€ºâ€œÅ’ Â¬Å’Å’Â¡Å¸â‰ˆ???
 float Sunflower::last_create_time = 0;
 int Sunflower::health = 100;
 int Sunflower::count = 0;
@@ -155,7 +155,7 @@ int main()
 			window.draw(i->sprite);
 			i->update(dt);
 			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME) FreeSunStopper(i);
-		} // îòðèñîâêà + àïäýéò + ñòîïàòîð
+		} // Ã“Ãšï£¿Ã‹Ã’Ã“â€šÃâ€¡ + â€¡Ã”â€°ËÃˆÃš + Ã’ÃšÃ“Ã”â€¡ÃšÃ“ï£¿
 		if ((time.asSeconds() > FREE_FROM_ZOMBIES_TIME) && (time.asSeconds() - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 		{
 			if (f == 0)

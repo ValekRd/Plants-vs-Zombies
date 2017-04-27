@@ -14,8 +14,10 @@
 /* Begin PBXFileReference section */
 		84315A341EA60B2C00E56051 /* Plants vs Zombies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Plants vs Zombies.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84315A381EA60B2C00E56051 /* Plants vs Zombies-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Plants vs Zombies-Info.plist"; sourceTree = "<group>"; };
-		84315A3C1EA60B2D00E56051 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		84315A3C1EA60B2D00E56051 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		84315A4E1EA60F0E00E56051 /* Objects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Objects.cpp; sourceTree = "<group>"; };
+		84F12F7F1EB264290051D3AD /* Сonstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Сonstants.h"; sourceTree = "<group>"; };
+		84F12F801EB264330051D3AD /* Objects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Objects.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,8 @@
 			children = (
 				84315A3C1EA60B2D00E56051 /* main.cpp */,
 				84315A4E1EA60F0E00E56051 /* Objects.cpp */,
+				84F12F801EB264330051D3AD /* Objects.h */,
+				84F12F7F1EB264290051D3AD /* Сonstants.h */,
 				84315A371EA60B2C00E56051 /* Supporting Files */,
 			);
 			path = "Plants vs Zombies";
