@@ -1,4 +1,3 @@
-//from src
 #include "Objects.h"
 #include "Сonstants.h"
 #include <SFML/Graphics.hpp>
@@ -6,8 +5,9 @@
 #include <cmath>
 #include <vector>
 #include <string>
+
 using namespace std;
-/* ◊“Œ ›“Œ ¬ŒŒ¡Ÿ≈???
+/*
 float Sunflower::last_create_time = 0;
 int Sunflower::health = 100;
 int Sunflower::count = 0;
@@ -33,23 +33,24 @@ void Download(vector <Frame>* frames, int count, string nameOfFrameType)
 	for (int i = 0; i < count; i++)
 	{
 		path = nameOfFrameType + "/" + to_string(i) + ".png";
-		//Frame frame = Frame(path);
 		frames->push_back (*(new Frame(path)));
-		//frames->push_back(frame);
 	}
-	//delete path;
+    
 }
 
 void CreateNewFreeSun(vector <Sun>* suns, float time)
 {
 	suns->push_back (*(new Sun(rand() % (9 * GRID.x) + OFFSET.x, rand() % (2 * GRID.y) + OFFSET.y, "sun.png", SUN_SPEED, time, 0)));
 	Sun::lastCreateTime = time;
-	cout << "SUN!!!" << endl;
 }
+
+
 void FreeSunStopper(vector<Sun>::iterator i)
 {
 	i->speed.y = 0;
 }
+
+
 void CreateNewZombie(vector <Zombie>* zombies, float time)
 {
 	zombies->push_back(*(new Zombie(900, (rand() % 5 + 1)* GRID.y - 55, "zombie.png", ZOMBIE_SPEED, time)));
@@ -138,32 +139,37 @@ int main()
 	vector <Zombie> zombies;
 	vector <Sunflower> sunflowers;
 	vector <Peas> peases;
-	int f = 0;
+	
 	while (window.isOpen())
 	{
 		sf::Time time = clock.getElapsedTime();
 		window.draw(background.sprite);
 		window.draw(topPanel.sprite);
+        
 		//digitFrames[0].sprite.setPosition(270, 61);
 		//window.draw(digitFrames[0].sprite);
+        
 		if (time.asSeconds() - Sun::lastCreateTime > INTERVAL_BETWEEN_FREE_SUN_GENERATION)
 		{
 				CreateNewFreeSun(&suns, time.asSeconds());
 		}
-		for (vector<Sun>::iterator i = suns.begin(); i != suns.end(); i++)
+        
+		for (auto i = suns.begin(); i != suns.end(); i++)
 		{
 			window.draw(i->sprite);
 			i->update(dt);
-			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME) FreeSunStopper(i);
-		} // ÓÚËÒÓ‚Í‡ + ‡Ô‰˝ÈÚ + ÒÚÓÔ‡ÚÓ
+            
+			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME)
+                FreeSunStopper(i);
+		}
+        
 		if ((time.asSeconds() > FREE_FROM_ZOMBIES_TIME) && (time.asSeconds() - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 		{
-			if (f == 0)
-			{
+			
 				CreateNewZombie(&zombies, time.asSeconds());
-				f = 1;
-			}
+    
 		}
+        
 		for (vector<Zombie>::iterator i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
