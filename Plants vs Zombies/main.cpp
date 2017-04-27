@@ -52,10 +52,10 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "My Plants VS Zombies");
 	Object background(0, 0, "fone.png", NULL_SPEED);
-	Object topPanel (TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y,"top_panel.png", NULL_SPEED);
+	Object topPanel (TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
 	//vector <Frame> digitFrames(NUM_OF_DIGIT_FRAMES);
 	//vector <Frame> sunflowerFrames(NUM_OF_SUNFLOWER_FRAMES);
-	vector <Frame> zombieFrames(NUM_OF_ZOMBIE_FRAMES);
+    std::vector <Frame> zombieFrames(NUM_OF_ZOMBIE_FRAMES);
 	//vector <Frame> peasFrames(NUM_OF_PEAS_FRAMES);
 	//Download(&digitFrames, NUM_OF_DIGIT_FRAMES, "digit");
 	//Download(&sunflowerFrames, NUM_OF_SUNFLOWER_FRAMES, "sunFlower");
@@ -65,10 +65,10 @@ int main()
 	/*vector <Bullet> bullets;*/
 	
 	sf::Clock clock;
-	vector <Sun> suns;
-	vector <Zombie> zombies;
-	vector <Sunflower> sunflowers;
-	vector <Peas> peases;
+    std::vector <Sun> suns;
+    std::vector <Zombie> zombies;
+    std::vector <Sunflower> sunflowers;
+    std::vector <Peas> peases;
 	
 	while (window.isOpen())
 	{
@@ -362,7 +362,7 @@ void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameTyp
     
     for (int i = 0; i < count; i++)
     {
-        path = nameOfFrameType + "/" + to_string(i) + ".png";
+        path = nameOfFrameType + "/" + std::to_string(i) + ".png";
         frames->push_back (*(new Frame(path)));
     }
     
@@ -452,6 +452,6 @@ void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frame
             i->numberOfFrame -= count; //(*frames).size();
         i->lastUpdateTime = time;
         
-        cout << "frame "<< i->numberOfFrame << endl;
+        std::cout << "frame "<< i->numberOfFrame << std::endl;
     }
 }

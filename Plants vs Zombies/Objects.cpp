@@ -6,7 +6,7 @@
 #include "Objects.h"
 #include "Сonstants.h"
 
-using namespace std;
+
 
 Object::Object(float x, float y, std::string filename, sf::Vector2f speed)
 {
@@ -63,12 +63,12 @@ Peas::Peas(float x, float y, std::string filename, sf::Vector2f speed, float pla
 }
 
 
-Frame::Frame(string filename)
+Frame::Frame(std::string filename)
 {
 	this->texture.loadFromFile("images/" + filename);
 	this->sprite.setTexture(texture);
 	//this->sprite.setScale(0.3f, 0.3f);
-	//cout << "here" << endl;
+    
 }
 
 
