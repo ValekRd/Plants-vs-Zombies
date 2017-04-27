@@ -1,3 +1,4 @@
+//from testSFML
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -25,7 +26,7 @@ public:
 	static float lastCreateTime;
 	float createTime;
 	int whoseSun;
-	Sun(float x, float y, string filename, sf::Vector2f spped, float createTime, int whoseSun);
+	Sun(float x, float y, std::string filename, sf::Vector2f spped, float createTime, int whoseSun);
 };
 class Zombie : public Object
 {
@@ -34,50 +35,43 @@ public:
 	float createTime;
 	static float lastCreateTime;
 	float lastUpdateTime;
-	Zombie(float x, float y, string filename, sf::Vector2f speed, float createTime);
+	int numberOfFrame;
+	Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime);
 };
-/*class Sunflower : public Object
+class Sunflower : public Object
 {
 public:
-	static int Health;
-	static int Count;
-	static int Status;
-	static float LastCreateTime;
-	int NumberOfFrame;
-	float LastUpdateTime;
-	float LastCreateSunTime;
-	float PlantTime;
-	Sunflower(float x, float y, string filename, int NumberOfFrame, float LastUpdateTime, float LastCreateSunTime, float PlantTime, float Health, int Status);
-};*/
-// not ready (constructor)
-/*
+	static int status;
+	static float lastCreateTime;
+	int health;
+	int numberOfFrame;
+	float lastUpdateTime;
+	float lastCreateSunTime;
+	float plantTime;
+	Sunflower(float x, float y, std::string filename, sf::Vector2f speed, float plantTime);
+};
+class Peas : public Object
+{
+public:
+	static int status;
+	static float lastCreateTime;
+	int health;
+	int numberOfFrame;
+	float lastUpdateTime;
+	float plantingTime;
+	Peas(float x, float y, std::string filename, sf::Vector2f speed, float plantTime);
+};
+
 class Frame
 {
 public:
 	sf::Texture texture;
 	sf::Sprite sprite;
-	sf::Image image;
 	Frame(string filename);
-};
-class Peas : public Plans
-{
-public:
-	static int health;
-	static int count;
-	static int status;
-	static float last_create_time;
-	int number_of_frame;
-	float last_update_time;
-	float planting_time;
-
-	Peas()
-	{
-
-	}
+	Frame();
 };
 
-
-
+/*
 class Bullet : public Object
 {
 public:
