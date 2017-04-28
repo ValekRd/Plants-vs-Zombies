@@ -1,5 +1,5 @@
-#include "C:\Users\user\Desktop\Проект\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
-#include "C:\Users\user\Desktop\Проект\TestSFML\vc2015project\testSFML\testSFML\Сonstants.h"
+#include "Objects.h"
+#include "Сonstants.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
@@ -365,10 +365,17 @@ void FreeSunStopper(std::vector<Sun>::iterator i)
 
 void CreateNewZombie(std::vector <Zombie>* zombies, float time)
 {
+
 	Zombie zomb(1050, (rand() % 5 + 1)* GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time);
 	//zombies->push_back(*(new Zombie(800, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time)));
 	zombies->push_back(zomb);
 	Zombie::lastCreateTime = time;
+
+    Zombie zomb(1050, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time);
+    //zombies->push_back(*(new Zombie(800, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time)));
+    zombies->push_back(zomb);
+    Zombie::lastCreateTime = time;
+    
 }
 
 
@@ -430,6 +437,6 @@ void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frame
 		else
 			i->numberOfFrame -= (*frames).size() - 1;
 		i->lastUpdateTime = time;
-		std::cout << "frame " << i->numberOfFrame << endl;
+        std::cout << "frame " << i->numberOfFrame << std::endl;
 	}
 }
