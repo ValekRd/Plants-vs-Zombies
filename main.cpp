@@ -1,5 +1,5 @@
-#include "Objects.h"
-#include "Сonstants.h"
+#include "C:\Users\user\Desktop\Проект\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
+#include "C:\Users\user\Desktop\Проект\TestSFML\vc2015project\testSFML\testSFML\Сonstants.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
@@ -35,10 +35,10 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "My Plants VS Zombies");
 	Object background(0, 0, "fone.png", NULL_SPEED);
-	Object topPanel (TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
+	Object topPanel(TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
 	//vector <Frame> digitFrames(NUM_OF_DIGIT_FRAMES);
 	//vector <Frame> sunflowerFrames(NUM_OF_SUNFLOWER_FRAMES);
-    std::vector <Frame> zombieFrames(NUM_OF_ZOMBIE_FRAMES);
+	std::vector <Frame> zombieFrames(0);
 	//vector <Frame> peasFrames(NUM_OF_PEAS_FRAMES);
 	//Download(&digitFrames, NUM_OF_DIGIT_FRAMES, "digit");
 	//Download(&sunflowerFrames, NUM_OF_SUNFLOWER_FRAMES, "sunFlower");
@@ -46,253 +46,257 @@ int main()
 	//Download(&peasFrames, NUM_OF_PEAS_FRAMES, "peas");
 	//create our objects
 	/*vector <Bullet> bullets;*/
-	
+
 	sf::Clock clock;
-    std::vector <Sun> suns;
-    std::vector <Zombie> zombies;
-    std::vector <Sunflower> sunflowers;
-    std::vector <Peas> peases;
-	
+	std::vector <Sun> suns;
+	std::vector <Zombie> zombies;
+	std::vector <Sunflower> sunflowers;
+	std::vector <Peas> peases;
+	int f = 0;
 	while (window.isOpen())
 	{
 		sf::Time time = clock.getElapsedTime();
 		window.draw(background.sprite);
 		window.draw(topPanel.sprite);
-        
+
 		//digitFrames[0].sprite.setPosition(270, 61);
 		//window.draw(digitFrames[0].sprite);
-        
+
 		if (time.asSeconds() - Sun::lastCreateTime > INTERVAL_BETWEEN_FREE_SUN_GENERATION)
 		{
-				CreateNewFreeSun(&suns, time.asSeconds());
+			CreateNewFreeSun(&suns, time.asSeconds());
 		}
-        
+
 		for (auto i = suns.begin(); i != suns.end(); i++)
 		{
 			window.draw(i->sprite);
 			i->update(dt);
-            
+
 			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME)
-                FreeSunStopper(i);
+				FreeSunStopper(i);
 		}
 		if ((time.asSeconds() > FREE_FROM_ZOMBIES_TIME) && (time.asSeconds() - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 		{
-			CreateNewZombie(&zombies, time.asSeconds());
+			if (f == 0)
+			{
+				CreateNewZombie(&zombies, time.asSeconds());
+				f = 1;
+			}
 		}
-		    
+
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
-            SwapZombieFrame(i, &zombieFrames, time.asSeconds());
-            i->update(dt);
+			SwapZombieFrame(i, &zombieFrames, time.asSeconds());
+			i->update(dt);
 		}
-        
-        
+
+
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-			ClickOnSun(&suns, mousePosition);	
+			ClickOnSun(&suns, mousePosition);
 			CreateNewSunflower(&sunflowers, mousePosition, time.asSeconds());
 			//CreateNewPeas(&peases, mousePosition, time.asSeconds());
 		}
-        
-        for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
-        {
-            window.draw(i->sprite);
-        }
-        
-        
-        
-        
-        
-        
-		/*
-		if (Sunflower::status == 1)
-		{
-			sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-			sunflowers.back().sprite.setPosition(mousePosition.x - 30, mousePosition.y - 30);
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && (time.asSeconds() - Sunflower::last_create_time) > time_planting
-				&& mousePosition.x > offset_x && mousePosition.x < 978 && mousePosition.y > offset_y && mousePosition.y < 569)
-			{
-				sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-
-				int x = int((mousePosition.x - offset_x) / grid_x);
-				int y = int((mousePosition.y - offset_y) / grid_y);
-				x = offset_x + x * grid_x + grid_x / 2 - 36;
-				y = offset_y + y * grid_y + grid_y / 2 - 50;
-				sunflowers.back().sprite.setPosition(x, y);
-				sunflowers.back().last_create_sun_time = time.asSeconds();
-				Sunflower::status = 2;
-			}
-		}
-
-
-		if (Peas::status == 1)
-		{
-			sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-			peases.back().sprite.setPosition(mousePosition.x - 30, mousePosition.y - 30);
-
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && (time.asSeconds() - Peas::last_create_time) > time_planting
-				&& mousePosition.x > offset_x && mousePosition.x < 978 && mousePosition.y > offset_y && mousePosition.y < 569)
-			{
-				sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-
-				int x = int((mousePosition.x - offset_x) / grid_x);
-				int y = int((mousePosition.y - offset_y) / grid_y);
-				x = offset_x + x * grid_x + grid_x / 2 - 36;
-				y = offset_y + y * grid_y + grid_y / 2 - 50;
-				peases.back().sprite.setPosition(x, y);
-				Peas::status = 2;
-			}
-		}
-
-
-		//create sunflower's stars
-		if (Sunflower::status == 2)
-		{
-			for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
-			{
-				if (time.asSeconds() - i->last_create_sun_time > 10)
-				{
-					Sun sun;
-					sun.sprite.setTexture(sun_texture);
-					sun.sprite.setScale(0.5f, 0.5f);
-					sun.create_time = time.asSeconds();
-					sun.whose_sun = 1;
-					sf::Vector2f center_cun = i->sprite.getPosition();
-					sun.sprite.setPosition(center_cun.x + 30, center_cun.y - 30);
-					stars.push_back(sun);
-					i->last_create_sun_time = time.asSeconds();
-					Sun::count++;
-
-					if (Sunflower::status == 1 && i == (sunflowers.end() - 2))
-						break;
-				}
-			}
-		}
-		*/
-		//update frames of sunflowers
-		/*if (Sunflower::status == 2)
-		{
-			for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
-			{
-				if (time.asSeconds() - i->last_update_time > 0.02)
-				{
-					i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
-					if (i->number_of_frame < 59)
-					{
-						i->number_of_frame++;
-					}
-					else
-					{
-						i->number_of_frame -= 59;
-					}
-					i->last_update_time = time.asSeconds();
-
-					if (Sunflower::status == 1 && i == (sunflowers.end() - 2))
-						break;
-				}
-			}
-		}
-
-		//update frames of peas and create bullets
-		if (Peas::status == 2)
-		{
-			for (auto i = peases.begin(); i != peases.end(); i++)
-			{
-				if (time.asSeconds() - i->last_update_time > 0.02)
-				{
-					i->sprite.setTexture(peas_frames[i->number_of_frame].texture);
-					if (i->number_of_frame < 59)
-					{
-						i->number_of_frame++;
-
-						//create bullet
-						if (i->number_of_frame == 33)
-						{
-							Bullet bul;
-							bul.sprite.setTexture(bul_texture);
-							bul.sprite.setScale(0.3f, 0.3f);
-							sf::Vector2f center = i->sprite.getPosition();
-							bul.sprite.setPosition(center.x + 55, center.y + 14);
-							bul.create_time = time.asSeconds();
-							bullets.push_back(bul);
-						}
-
-					}
-					else
-					{
-						i->number_of_frame -= 59;
-					}
-					i->last_update_time = time.asSeconds();
-				}
-
-				if (Peas::status == 1 && i == (peases.end() - 2))
-					break;
-			}
-		}
-
-
-		//update bullets
-		for (auto i = bullets.begin(); i != bullets.end(); i++)
-		{
-			sf::Vector2f current_point = i->sprite.getPosition();
-			i->sprite.setPosition(current_point.x + 1, current_point.y);
-		}
-
-
-		//update frames of zombie
-		for (auto i = zombies.begin(); i != zombies.end(); i++)
-		{
-			if (time.asSeconds() - i->last_update_time > 0.2)
-			{
-				i->sprite.setTexture(zombie_frames[i->number_of_frame].texture);
-				if (i->number_of_frame < 92)
-				{
-					i->number_of_frame++;
-				}
-				else
-				{
-					i->number_of_frame -= 92;
-				}
-				i->last_update_time = time.asSeconds();
-			}
-		}
-
-
-		//draw sunflowers
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
 		{
 			window.draw(i->sprite);
 		}
 
 
+
+
+
+
+		/*
+		if (Sunflower::status == 1)
+		{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+		sunflowers.back().sprite.setPosition(mousePosition.x - 30, mousePosition.y - 30);
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && (time.asSeconds() - Sunflower::last_create_time) > time_planting
+		&& mousePosition.x > offset_x && mousePosition.x < 978 && mousePosition.y > offset_y && mousePosition.y < 569)
+		{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+		int x = int((mousePosition.x - offset_x) / grid_x);
+		int y = int((mousePosition.y - offset_y) / grid_y);
+		x = offset_x + x * grid_x + grid_x / 2 - 36;
+		y = offset_y + y * grid_y + grid_y / 2 - 50;
+		sunflowers.back().sprite.setPosition(x, y);
+		sunflowers.back().last_create_sun_time = time.asSeconds();
+		Sunflower::status = 2;
+		}
+		}
+
+
+		if (Peas::status == 1)
+		{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+		peases.back().sprite.setPosition(mousePosition.x - 30, mousePosition.y - 30);
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && (time.asSeconds() - Peas::last_create_time) > time_planting
+		&& mousePosition.x > offset_x && mousePosition.x < 978 && mousePosition.y > offset_y && mousePosition.y < 569)
+		{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+		int x = int((mousePosition.x - offset_x) / grid_x);
+		int y = int((mousePosition.y - offset_y) / grid_y);
+		x = offset_x + x * grid_x + grid_x / 2 - 36;
+		y = offset_y + y * grid_y + grid_y / 2 - 50;
+		peases.back().sprite.setPosition(x, y);
+		Peas::status = 2;
+		}
+		}
+
+
+		//create sunflower's stars
+		if (Sunflower::status == 2)
+		{
+		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
+		{
+		if (time.asSeconds() - i->last_create_sun_time > 10)
+		{
+		Sun sun;
+		sun.sprite.setTexture(sun_texture);
+		sun.sprite.setScale(0.5f, 0.5f);
+		sun.create_time = time.asSeconds();
+		sun.whose_sun = 1;
+		sf::Vector2f center_cun = i->sprite.getPosition();
+		sun.sprite.setPosition(center_cun.x + 30, center_cun.y - 30);
+		stars.push_back(sun);
+		i->last_create_sun_time = time.asSeconds();
+		Sun::count++;
+
+		if (Sunflower::status == 1 && i == (sunflowers.end() - 2))
+		break;
+		}
+		}
+		}
+		*/
+		//update frames of sunflowers
+		/*if (Sunflower::status == 2)
+		{
+		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
+		{
+		if (time.asSeconds() - i->last_update_time > 0.02)
+		{
+		i->sprite.setTexture(sunflower_frames[i->number_of_frame].texture);
+		if (i->number_of_frame < 59)
+		{
+		i->number_of_frame++;
+		}
+		else
+		{
+		i->number_of_frame -= 59;
+		}
+		i->last_update_time = time.asSeconds();
+
+		if (Sunflower::status == 1 && i == (sunflowers.end() - 2))
+		break;
+		}
+		}
+		}
+
+		//update frames of peas and create bullets
+		if (Peas::status == 2)
+		{
+		for (auto i = peases.begin(); i != peases.end(); i++)
+		{
+		if (time.asSeconds() - i->last_update_time > 0.02)
+		{
+		i->sprite.setTexture(peas_frames[i->number_of_frame].texture);
+		if (i->number_of_frame < 59)
+		{
+		i->number_of_frame++;
+
+		//create bullet
+		if (i->number_of_frame == 33)
+		{
+		Bullet bul;
+		bul.sprite.setTexture(bul_texture);
+		bul.sprite.setScale(0.3f, 0.3f);
+		sf::Vector2f center = i->sprite.getPosition();
+		bul.sprite.setPosition(center.x + 55, center.y + 14);
+		bul.create_time = time.asSeconds();
+		bullets.push_back(bul);
+		}
+
+		}
+		else
+		{
+		i->number_of_frame -= 59;
+		}
+		i->last_update_time = time.asSeconds();
+		}
+
+		if (Peas::status == 1 && i == (peases.end() - 2))
+		break;
+		}
+		}
+
+
+		//update bullets
+		for (auto i = bullets.begin(); i != bullets.end(); i++)
+		{
+		sf::Vector2f current_point = i->sprite.getPosition();
+		i->sprite.setPosition(current_point.x + 1, current_point.y);
+		}
+
+
+		//update frames of zombie
+		for (auto i = zombies.begin(); i != zombies.end(); i++)
+		{
+		if (time.asSeconds() - i->last_update_time > 0.2)
+		{
+		i->sprite.setTexture(zombie_frames[i->number_of_frame].texture);
+		if (i->number_of_frame < 92)
+		{
+		i->number_of_frame++;
+		}
+		else
+		{
+		i->number_of_frame -= 92;
+		}
+		i->last_update_time = time.asSeconds();
+		}
+		}
+
+
+		//draw sunflowers
+		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
+		{
+		window.draw(i->sprite);
+		}
+
+
 		//draw zombies
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
-			window.draw(i->sprite);
+		window.draw(i->sprite);
 		}
 
 
 		//draw peas
 		for (auto i = peases.begin(); i != peases.end(); i++)
 		{
-			window.draw(i->sprite);
+		window.draw(i->sprite);
 		}
 
 
 		//draw bullets
 		for (auto i = bullets.begin(); i != bullets.end(); i++)
 		{
-			window.draw(i->sprite);
+		window.draw(i->sprite);
 		}
 
 
 		//draw stars
 		for (std::vector<Sun>::iterator i = stars.begin(); i != stars.end(); i++)
 		{
-			window.draw(i->sprite);
+		window.draw(i->sprite);
 		}
 
 
@@ -301,22 +305,22 @@ int main()
 		//check second number
 		if (Sun::score % 100 / 10 == 5)
 		{
-			numbers[5].sprite.setPosition(259, 61);
-			window.draw(numbers[5].sprite);
+		numbers[5].sprite.setPosition(259, 61);
+		window.draw(numbers[5].sprite);
 		}
 		if (Sun::score % 100 / 10 == 0 && Sun::score > 50)
 		{
-			numbers[0].sprite.setPosition(259, 61);
-			window.draw(numbers[0].sprite);
+		numbers[0].sprite.setPosition(259, 61);
+		window.draw(numbers[0].sprite);
 		}
 		//check third number
 		for (int i = 1; i < 10; i++)
 		{
-			if (Sun::score % 1000 / 100 == i)
-			{
-				numbers[i].sprite.setPosition(248, 61);
-				window.draw(numbers[i].sprite);
-			}
+		if (Sun::score % 1000 / 100 == i)
+		{
+		numbers[i].sprite.setPosition(248, 61);
+		window.draw(numbers[i].sprite);
+		}
 		} */
 
 		window.display();
@@ -336,89 +340,89 @@ int main()
 
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType)
 {
-    std::string path;
-    
-    for (int i = 0; i < count; i++)
-    {
-        path = nameOfFrameType + "/" + std::to_string(i) + ".png";
-        frames->push_back (*(new Frame(path)));
-    }
-    
+	std::string path;
+
+	for (int i = 0; i < count; i++)
+	{
+		path = nameOfFrameType + "/" + std::to_string(i) + ".png";
+		frames->push_back(*(new Frame(path)));
+	}
+
 }
 
 
 void CreateNewFreeSun(std::vector <Sun>* suns, float time)
 {
-    suns->push_back (*(new Sun(rand() % (9 * GRID.x) + OFFSET.x, rand() % (2 * GRID.y) + OFFSET.y, "sun.png", SUN_SPEED, time, 0)));
-    Sun::lastCreateTime = time;
+	suns->push_back(*(new Sun(rand() % (9 * GRID.x) + OFFSET.x, rand() % (2 * GRID.y) + OFFSET.y, "sun.png", SUN_SPEED, time, 0)));
+	Sun::lastCreateTime = time;
 }
 
 void FreeSunStopper(std::vector<Sun>::iterator i)
 {
-    i->speed.y = 0;
+	i->speed.y = 0;
 }
 
 
 void CreateNewZombie(std::vector <Zombie>* zombies, float time)
 {
-    Zombie zomb(800, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time);
-    //zombies->push_back(*(new Zombie(800, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time)));
-    zombies->push_back(zomb);
-    Zombie::lastCreateTime = time;
+	Zombie zomb(1050, (rand() % 5 + 1)* GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time);
+	//zombies->push_back(*(new Zombie(800, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time)));
+	zombies->push_back(zomb);
+	Zombie::lastCreateTime = time;
 }
 
 
 void CreateNewSunflower(std::vector <Sunflower>* sunflowers, sf::Vector2i mousePosition, float time)
 {
-    if (Sun::score >= 50 && mousePosition.x > 305 && mousePosition.x < 346 && mousePosition.y > 9 && mousePosition.y < 69 && Sunflower::status == 2)
-    {
-        Sunflower sunflower((float)mousePosition.x, (float)mousePosition.y, "sunflower/0.png", NULL_SPEED, time);
-        
-        //sunflower.sprite.setTexture(sunflower_frames[0].texture);
-        
-        sunflower.sprite.setScale(0.75f, 0.75f);
-        
-        sunflowers->push_back(sunflower);
-        Sun::score -= 50;
-        Sunflower::lastCreateTime = time;
-        Sunflower::status = 1;
-    }
+	if (Sun::score >= 50 && mousePosition.x > 305 && mousePosition.x < 346 && mousePosition.y > 9 && mousePosition.y < 69 && Sunflower::status == 2)
+	{
+		Sunflower sunflower((float)mousePosition.x, (float)mousePosition.y, "sunflower/0.png", NULL_SPEED, time);
+
+		//sunflower.sprite.setTexture(sunflower_frames[0].texture);
+
+		sunflower.sprite.setScale(0.75f, 0.75f);
+
+		sunflowers->push_back(sunflower);
+		Sun::score -= 50;
+		Sunflower::lastCreateTime = time;
+		Sunflower::status = 1;
+	}
 }
 
 
 void CreateNewPeas(std::vector <Peas>* peases, sf::Vector2i mousePosition, float time)
 {
-    if (Sun::score >= 100 && mousePosition.x > 352 && mousePosition.x < 394 && mousePosition.y > 9 && mousePosition.y < 69 && Peas::status == 2)
-    {
-        Peas::status = 1;
-        //peas.sprite.setTexture(peas_frames[0].texture);
-        //peas.sprite.setScale(0.75f, 0.75f);
-        peases->push_back(*(new Peas ((float)mousePosition.x, (float)mousePosition.y, "peas.png", NULL_SPEED, time)));
-        Sun::score -= 100;
-        Peas::lastCreateTime = time;
-    }
+	if (Sun::score >= 100 && mousePosition.x > 352 && mousePosition.x < 394 && mousePosition.y > 9 && mousePosition.y < 69 && Peas::status == 2)
+	{
+		Peas::status = 1;
+		//peas.sprite.setTexture(peas_frames[0].texture);
+		//peas.sprite.setScale(0.75f, 0.75f);
+		peases->push_back(*(new Peas((float)mousePosition.x, (float)mousePosition.y, "peas.png", NULL_SPEED, time)));
+		Sun::score -= 100;
+		Peas::lastCreateTime = time;
+	}
 }
 
 
 void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition)
 {
-    for (auto i = (*suns).begin(); i != (*suns).end(); i++)
-    {
-        sf::Vector2f center (i->sprite.getPosition().x + 40, i->sprite.getPosition().y + 40);
-        sf::Vector2f d = sf::Vector2f(float(mousePosition.x), float(mousePosition.y)) - center;
-        if (std::abs(d.x) < 30 && std::abs(d.y) < 30)
-        {
-            Sun::score += 50;
-            (*suns).erase(i);
-            if (i == (*suns).end())
-                break;
-        }
-    }
+	for (auto i = (*suns).begin(); i != (*suns).end(); i++)
+	{
+		sf::Vector2f center(i->sprite.getPosition().x + 40, i->sprite.getPosition().y + 40);
+		sf::Vector2f d = sf::Vector2f(float(mousePosition.x), float(mousePosition.y)) - center;
+		if (std::abs(d.x) < 30 && std::abs(d.y) < 30)
+		{
+			Sun::score += 50;
+			(*suns).erase(i);
+			if (i == (*suns).end())
+				break;
+		}
+	}
 }
 
-void SwapZombieFrame(vector<Zombie>::iterator i, vector <Frame>* frames, float time)
+void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time)
 {
-	if (time - i->lastUpdateTime > 0.2)
+	if (time - i->lastUpdateTime > 0.05)
 	{
 		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
 		if ((i->numberOfFrame) < (*frames).size() - 1)
@@ -426,5 +430,6 @@ void SwapZombieFrame(vector<Zombie>::iterator i, vector <Frame>* frames, float t
 		else
 			i->numberOfFrame -= (*frames).size() - 1;
 		i->lastUpdateTime = time;
+		std::cout << "frame " << i->numberOfFrame << endl;
 	}
 }
