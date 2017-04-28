@@ -21,7 +21,7 @@ void CreateNewPeas(std::vector <Peas>* peases, sf::Vector2i mousePosition, float
 
 void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition);
 
-void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time, int count);
+void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time);
 
 
 int Sun::score = 1000;
@@ -75,22 +75,17 @@ int main()
 			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME)
                 FreeSunStopper(i);
 		}
-        
-		/*if ((time.asSeconds() > FREE_FROM_ZOMBIES_TIME) && (time.asSeconds() - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
+		if ((time.asSeconds() > FREE_FROM_ZOMBIES_TIME) && (time.asSeconds() - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 		{
-			
-				CreateNewZombie(&zombies, time.asSeconds());
-    
+			CreateNewZombie(&zombies, time.asSeconds());
 		}
-        
+		    
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
-            
-			//SwapZombieFrame(i, &zombieFrames, time.asSeconds(), NUM_OF_ZOMBIE_FRAMES);
-            
-			//i->update(dt);
-		}*/
+            SwapZombieFrame(i, &zombieFrames, time.asSeconds());
+            i->update(dt);
+		}
         
         
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -421,20 +416,15 @@ void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition)
     }
 }
 
-
-void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time, int count)
+void SwapZombieFrame(vector<Zombie>::iterator i, vector <Frame>* frames, float time)
 {
-    if (time - i->lastUpdateTime > 0.2)
-    {
-        i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
-        //i->sprite.setScale(0.5, 0.5);
-        
-        if ((i->numberOfFrame) < (*frames).size())
-            i->numberOfFrame++;
-        else
-            i->numberOfFrame -= count; //(*frames).size();
-        i->lastUpdateTime = time;
-        
-        std::cout << "frame "<< i->numberOfFrame << std::endl;
-    }
+	if (time - i->lastUpdateTime > 0.2)
+	{
+		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
+		if ((i->numberOfFrame) < (*frames).size() - 1)
+			i->numberOfFrame++;
+		else
+			i->numberOfFrame -= (*frames).size() - 1;
+		i->lastUpdateTime = time;
+	}
 }
