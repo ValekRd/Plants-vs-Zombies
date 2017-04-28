@@ -11,10 +11,11 @@ class Object
 public:
 	sf::Texture texture;
 	sf::Sprite sprite;
-	sf::Image image;
 	sf::Vector2f pos;
 	sf::Vector2f speed;
+    
 	Object(float x, float y, std::string filename, sf::Vector2f speed);
+    
 	void update(float dt);
 };
 

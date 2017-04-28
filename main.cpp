@@ -6,22 +6,6 @@
 #include <vector>
 #include <string>
 
-/*
-float Sunflower::last_create_time = 0;
-int Sunflower::health = 100;
-int Sunflower::count = 0;
-int Sunflower::status = 2;
-
-int Sun::score = 1000;
-float Sun::last_create_time = 0;
-int Sun::count = 0;
-float Zombie::last_create_time = 0;
-int Zombie::count = 0;
-
-float Peas::last_create_time = 0;
-int Peas::status = 2;
-int Peas::count = 0;
-*/
 
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType);
 
