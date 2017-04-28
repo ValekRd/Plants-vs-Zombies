@@ -370,11 +370,6 @@ void CreateNewZombie(std::vector <Zombie>* zombies, float time)
 	//zombies->push_back(*(new Zombie(800, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time)));
 	zombies->push_back(zomb);
 	Zombie::lastCreateTime = time;
-
-    Zombie zomb(1050, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time);
-    //zombies->push_back(*(new Zombie(800, (rand() % 5 + 1)* GRID.y, "zombie/0.png", ZOMBIE_SPEED, time)));
-    zombies->push_back(zomb);
-    Zombie::lastCreateTime = time;
     
 }
 
