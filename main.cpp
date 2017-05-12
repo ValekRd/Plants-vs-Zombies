@@ -1,5 +1,5 @@
-#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
-#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Ñonstants.h"
+#include "Objects.h"
+#include "Ð¡onstants.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
@@ -44,7 +44,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "My Plants VS Zombies");
 	Object background(0, 0, "fone.png", NULL_SPEED);
 	Object topPanel(TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
-	vector <Frame> digitFrames(0);
+    std::vector <Frame> digitFrames(0);
 	std::vector <Frame> sunflowerFrames(0);
 	std::vector <Frame> zombieFrames(0);
 	std::vector <Frame> peasFrames(0);
@@ -67,7 +67,12 @@ int main()
 		window.draw(topPanel.sprite);
 		digitFrames[0].sprite.setPosition(270, 61);
 		window.draw(digitFrames[0].sprite);
+<<<<<<< Updated upstream
 		CreateNewFreeSun(&suns, time.asSeconds(), &sunFrame);
+=======
+		
+		CreateNewFreeSun(&suns, time.asSeconds());
+>>>>>>> Stashed changes
 		CreateNewZombie(&zombies, time.asSeconds());
 
 		sf::Event event;
@@ -85,6 +90,7 @@ int main()
 				PlantingPeas(&peases, mousePosition, time.asSeconds());
 			}
 		}
+        
 		SunflowerMoveWithMouse(&sunflowers, sf::Mouse::getPosition(window));
 		PeasMoveWithMouse(&peases, sf::Mouse::getPosition(window));
 
@@ -338,6 +344,18 @@ void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameTyp
 
 }
 
+<<<<<<< Updated upstream
+=======
+void CreateNewFreeSun(std::vector <Sun>* suns, float time)
+{
+	if (time - Sun::lastCreateTime > INTERVAL_BETWEEN_FREE_SUN_GENERATION)
+	{
+		suns->push_back(Sun (rand() % (9 * GRID.x) + OFFSET.x, rand() % (2 * GRID.y) + OFFSET.y, "sun.png", SUN_SPEED, time, 0));
+		Sun::lastCreateTime = time;
+	}
+}
+
+>>>>>>> Stashed changes
 void FreeSunStopper(std::vector<Sun>::iterator i)
 {
 	i->speed.y = 0;

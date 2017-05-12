@@ -1,12 +1,10 @@
-//from testSFML
-#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <string>
-#include "C:\Users\user\Desktop\Ïğîåêò\TestSFML\vc2015project\testSFML\testSFML\Ñonstants.h"
-#include "C:\Users\user\Desktop\Ïğîåêò\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
+#include "Ğ¡onstants.h"
+#include "Objects.h"
 
 using namespace std;
 

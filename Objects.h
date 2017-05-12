@@ -1,5 +1,3 @@
-//from testSFML
-#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
@@ -26,7 +24,7 @@ public:
 	static float lastCreateTime;
 	float createTime;
 	int whoseSun;
-	Sun(float x, float y, std::string filename, sf::Vector2f spped, float createTime, int whoseSun);
+	Sun(float x, float y, std::string filename, sf::Vector2f speed, float createTime, int whoseSun);
 };
 class Zombie : public Object
 {
