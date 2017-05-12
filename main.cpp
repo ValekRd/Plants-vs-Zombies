@@ -1,5 +1,5 @@
-#include "C:\Users\user\Desktop\Проект\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
-#include "C:\Users\user\Desktop\Проект\TestSFML\vc2015project\testSFML\testSFML\Сonstants.h"
+#include "Objects.h"
+#include "Constants.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
