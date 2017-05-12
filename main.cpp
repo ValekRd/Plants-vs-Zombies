@@ -8,7 +8,7 @@
 
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType);
 
-void CreateNewFreeSun(std::vector <Sun>* suns, float time);
+void CreateNewFreeSun(std::vector <Sun>* suns, float time, Frame* sunFrame);
 
 void CreateNewZombie(std::vector <Zombie>* zombies, float time);
 
@@ -48,6 +48,7 @@ int main()
 	std::vector <Frame> sunflowerFrames(0);
 	std::vector <Frame> zombieFrames(0);
 	std::vector <Frame> peasFrames(0);
+	Frame sunFrame("sun.png");
 	Download(&digitFrames, NUM_OF_DIGIT_FRAMES, "digit");
 	Download(&sunflowerFrames, NUM_OF_SUNFLOWER_FRAMES, "sunFlower");
 	Download(&zombieFrames, NUM_OF_ZOMBIE_FRAMES, "zombie");
@@ -60,19 +61,15 @@ int main()
 	std::vector <Peas> peases;
 	while (window.isOpen())
 	{
+
 		sf::Time time = clock.getElapsedTime();
 		window.draw(background.sprite);
 		window.draw(topPanel.sprite);
 		digitFrames[0].sprite.setPosition(270, 61);
 		window.draw(digitFrames[0].sprite);
-		
-		CreateNewFreeSun(&suns, time.asSeconds());
-		if (suns.size() > 0) {
-			suns.back().sprite.setPosition(0, 0);
-			window.draw(suns.back().sprite);
-		}
+		CreateNewFreeSun(&suns, time.asSeconds(), &sunFrame);
 		CreateNewZombie(&zombies, time.asSeconds());
-		
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -90,14 +87,7 @@ int main()
 		}
 		SunflowerMoveWithMouse(&sunflowers, sf::Mouse::getPosition(window));
 		PeasMoveWithMouse(&peases, sf::Mouse::getPosition(window));
-		
-		for (auto i = suns.begin(); i != suns.end(); i++)
-		{
-			window.draw(i->sprite);
-			i->update(dt);
-			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME)
-				FreeSunStopper(i);
-		}
+
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
@@ -114,7 +104,7 @@ int main()
 			window.draw(i->sprite);
 			SwapPeasFrame(i, &peasFrames, time.asSeconds());
 		}
-		
+
 		//check second number
 		if (Sun::score % 100 / 10 == 5)
 		{
@@ -134,6 +124,13 @@ int main()
 				digitFrames[i].sprite.setPosition(248, 61);
 				window.draw(digitFrames[i].sprite);
 			}
+		}
+		for (auto i = suns.begin(); i != suns.end(); i++)
+		{
+			window.draw(i->sprite);
+			i->update(dt);
+			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME)
+				FreeSunStopper(i);
 		}
 		//create sunflower's stars
 		/*
@@ -220,7 +217,7 @@ int main()
 		}
 		//////////////////////////////////////////////////// score
 		} */
-		window.display();		
+		window.display();
 	}
 
 	return 0;
@@ -319,6 +316,16 @@ void PlantingSunflower(vector <Sunflower>* sunflowers, sf::Vector2i mousePositio
 	}
 }
 
+void CreateNewFreeSun(std::vector <Sun>* suns, float time, Frame *sunFrame)
+{
+	if (time - Sun::lastCreateTime > INTERVAL_BETWEEN_FREE_SUN_GENERATION)
+	{
+		suns->push_back(Sun(rand() % (9 * GRID.x) + OFFSET.x, rand() % (2 * GRID.y) + OFFSET.y, "sun.png", SUN_SPEED, time, 0));
+		(*suns).back().sprite.setTexture((*sunFrame).texture);
+		Sun::lastCreateTime = time;
+	}
+}
+
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType)
 {
 	std::string path;
@@ -331,15 +338,6 @@ void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameTyp
 
 }
 
-void CreateNewFreeSun(std::vector <Sun>* suns, float time)
-{
-	if (time - Sun::lastCreateTime > INTERVAL_BETWEEN_FREE_SUN_GENERATION)
-	{
-		suns->push_back(Sun(rand() % (9 * GRID.x) + OFFSET.x, rand() % (2 * GRID.y) + OFFSET.y, "sun.png", SUN_SPEED, time, 0));
-		Sun::lastCreateTime = time;
-	}
-}
-
 void FreeSunStopper(std::vector<Sun>::iterator i)
 {
 	i->speed.y = 0;
@@ -349,7 +347,7 @@ void CreateNewZombie(std::vector <Zombie>* zombies, float time)
 {
 	if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 	{
-		zombies->push_back(Zombie (1000, (rand() % 5 + 1)* GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time));
+		zombies->push_back(Zombie(1000, (rand() % 5 + 1)* GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time));
 		Zombie::lastCreateTime = time;
 	}
 }
