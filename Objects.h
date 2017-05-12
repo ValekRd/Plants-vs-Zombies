@@ -18,7 +18,7 @@ public:
 	sf::Vector2f speed;
 	Object(float x, float y, std::string filename, sf::Vector2f speed);
 	void update(float dt);
-};
+}; 
 class Sun : public Object
 {
 public:
@@ -75,6 +75,6 @@ public:
 class Bullet : public Object
 {
 public:
-int create_time;
+	int create_time;
 };
-*/
+ */

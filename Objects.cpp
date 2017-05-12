@@ -5,8 +5,8 @@
 #include <cmath>
 #include <vector>
 #include <string>
-#include "C:\Users\user\Desktop\ÐŸÑ€Ð¾ÐµÐºÑ‚\TestSFML\vc2015project\testSFML\testSFML\Ð¡onstants.h"
-#include "C:\Users\user\Desktop\ÐŸÑ€Ð¾ÐµÐºÑ‚\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
+#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Ñonstants.h"
+#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
-#include "C:\Users\user\Desktop\ÐŸÑ€Ð¾ÐµÐºÑ‚\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
-#include "C:\Users\user\Desktop\ÐŸÑ€Ð¾ÐµÐºÑ‚\TestSFML\vc2015project\testSFML\testSFML\Ð¡onstants.h"
+#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Objects.h"
+#include "C:\Users\user\Desktop\Ïðîåêò\TestSFML\vc2015project\testSFML\testSFML\Ñonstants.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
@@ -65,14 +65,14 @@ int main()
 		window.draw(topPanel.sprite);
 		digitFrames[0].sprite.setPosition(270, 61);
 		window.draw(digitFrames[0].sprite);
-
+		
 		CreateNewFreeSun(&suns, time.asSeconds());
 		if (suns.size() > 0) {
 			suns.back().sprite.setPosition(0, 0);
 			window.draw(suns.back().sprite);
 		}
 		CreateNewZombie(&zombies, time.asSeconds());
-
+		
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -90,7 +90,7 @@ int main()
 		}
 		SunflowerMoveWithMouse(&sunflowers, sf::Mouse::getPosition(window));
 		PeasMoveWithMouse(&peases, sf::Mouse::getPosition(window));
-
+		
 		for (auto i = suns.begin(); i != suns.end(); i++)
 		{
 			window.draw(i->sprite);
@@ -114,7 +114,7 @@ int main()
 			window.draw(i->sprite);
 			SwapPeasFrame(i, &peasFrames, time.asSeconds());
 		}
-
+		
 		//check second number
 		if (Sun::score % 100 / 10 == 5)
 		{
@@ -220,7 +220,7 @@ int main()
 		}
 		//////////////////////////////////////////////////// score
 		} */
-		window.display();
+		window.display();		
 	}
 
 	return 0;
@@ -349,7 +349,7 @@ void CreateNewZombie(std::vector <Zombie>* zombies, float time)
 {
 	if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 	{
-		zombies->push_back(Zombie(1000, (rand() % 5 + 1)* GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time));
+		zombies->push_back(Zombie (1000, (rand() % 5 + 1)* GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time));
 		Zombie::lastCreateTime = time;
 	}
 }
