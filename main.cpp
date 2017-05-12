@@ -83,6 +83,7 @@ int main()
 				PlantingSunflower(&sunflowers, mousePosition, time.asSeconds());
 				CreateNewPeas(&peases, mousePosition, time.asSeconds());
 				PlantingPeas(&peases, mousePosition, time.asSeconds());
+				cout << mousePosition.x << ' ' << mousePosition.y << endl;
 			}
 		}
 		SunflowerMoveWithMouse(&sunflowers, sf::Mouse::getPosition(window));
