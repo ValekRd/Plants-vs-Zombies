@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 // sizes
-const sf::Vector2i GRID(80, 96);   //размеры квадратика на поле 
-const sf::Vector2i OFFSET(258, 89);			//координаты начала поля
+const sf::Vector2i GRID(80, 96);  
+const sf::Vector2i OFFSET(258, 89);
 const int WINDOW_SIZE_X = 1024;
 const int WINDOW_SIZE_Y = 600;
 const int TOP_PANEL_POSITION_X = 230;

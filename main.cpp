@@ -6,6 +6,9 @@
 #include <vector>
 #include <string>
 
+template <typename T>
+void SwapFrame(T i, std::vector <Frame>* frames, float time, float FrameRate);
+
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType);
 
 void CreateNewFreeSun(std::vector <Sun>* suns, float time, Frame* sunFrame);
@@ -23,12 +26,6 @@ void PlantingPeas(vector <Peas>* peases, sf::Vector2i mousePosition, float time)
 void SunflowerMoveWithMouse(vector <Sunflower>* sunflowers, sf::Vector2i mousePosition);	//update
 
 void PeasMoveWithMouse(vector <Peas>* peases, sf::Vector2i mousePosition);
-
-void SwapSunflowerFrame(std::vector <Sunflower>::iterator i, std::vector <Frame>* frames, float time);
-
-void SwapPeasFrame(std::vector<Peas>::iterator i, std::vector <Frame>* frames, float time);
-
-void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time);
 
 void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition);
 
@@ -93,19 +90,21 @@ int main()
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapZombieFrame(i, &zombieFrames, time.asSeconds());
+			SwapFrame(i, &zombieFrames, time.asSeconds(), ZOMBIE_FRAME_RATE);
 			i->update(dt);
 		}
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
 		{
 			window.draw(i->sprite);
-			if (i->status == 1) SwapSunflowerFrame(i, &sunflowerFrames, time.asSeconds());
+			if (i->status == 1) SwapFrame(i, &sunflowerFrames, time.asSeconds(), SUNFLOWER_FRAME_RATE);
 			CreateNewSun(&suns, time.asSeconds(), &sunFrame, i);
+			if (i->status == 1) SwapFrame(i, &sunflowerFrames, time.asSeconds(), SUNFLOWER_FRAME_RATE);
 		}
 		for (auto i = peases.begin(); i != peases.end(); i++)
 		{
 			window.draw(i->sprite);
-			if (i->status == 1) SwapPeasFrame(i, &peasFrames, time.asSeconds());
+			if (i->status == 1) SwapFrame(i, &peasFrames, time.asSeconds(), PEAS_FRAME_RATE);
+			SwapFrame(i, &peasFrames, time.asSeconds(), PEAS_FRAME_RATE);
 		}
 		
 		//check second number
@@ -384,42 +383,17 @@ void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition)
 	}
 }
 
-void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time)
+template <typename T>
+void SwapFrame(T i, std::vector <Frame>* frames, float time, float FrameRate)
 {
-	if (time - i->lastUpdateTime > ZOMBIE_FRAME_RATE)
-	{
-		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
-		if ((i->numberOfFrame) < (*frames).size() - 1)
-			i->numberOfFrame++;
-		else
-			i->numberOfFrame -= ((*frames).size() - 1);
-		i->lastUpdateTime = time;
-	}
-}
-
-void SwapSunflowerFrame(std::vector<Sunflower>::iterator i, std::vector <Frame>* frames, float time)
-{
-	if (time - i->lastUpdateTime > SUNFLOWER_FRAME_RATE)
-	{
-		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
-		if ((i->numberOfFrame) < (*frames).size() - 1)
-			i->numberOfFrame++;
-		else
-			i->numberOfFrame -= ((*frames).size() - 1);
-		i->lastUpdateTime = time;
-	}
-}
-
-void SwapPeasFrame(std::vector<Peas>::iterator i, std::vector <Frame>* frames, float time)
-{
-	if (time - i->lastUpdateTime > PEAS_FRAME_RATE)
-	{
-		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
-		if ((i->numberOfFrame) < (*frames).size() - 1)
-			i->numberOfFrame++;
-		else
-			i->numberOfFrame -= ((*frames).size() - 1);
-		i->lastUpdateTime = time;
-	}
+    if (time - i->lastUpdateTime > FrameRate)
+    {
+        i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
+        if ((i->numberOfFrame) < (*frames).size() - 1)
+            i->numberOfFrame++;
+        else
+            i->numberOfFrame -= ((*frames).size() - 1);
+        i->lastUpdateTime = time;
+    }
 }
 
