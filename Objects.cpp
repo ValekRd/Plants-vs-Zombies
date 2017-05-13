@@ -56,6 +56,8 @@ Frame::Frame(string filename)
 {
 	this->texture.loadFromFile("images/" + filename);
 	this->sprite.setTexture(texture);
+	//this->sprite.setScale(0.3f, 0.3f);
+	//cout << "here" << endl;
 }
 Frame::Frame()
 {}
