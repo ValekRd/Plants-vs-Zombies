@@ -6,6 +6,9 @@
 #include <vector>
 #include <string>
 
+template <typename T>
+void SwapFrame(T i, std::vector <Frame>* frames, float time);
+
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType);
 
 void CreateNewFreeSun(std::vector <Sun>* suns, float time, Frame* sunFrame);
@@ -92,18 +95,18 @@ int main()
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapZombieFrame(i, &zombieFrames, time.asSeconds());
+			SwapFrame(i, &zombieFrames, time.asSeconds());
 			i->update(dt);
 		}
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
 		{
 			window.draw(i->sprite);
-			if (i->status == 1) SwapSunflowerFrame(i, &sunflowerFrames, time.asSeconds());
+			if (i->status == 1) SwapFrame(i, &sunflowerFrames, time.asSeconds());
 		}
 		for (auto i = peases.begin(); i != peases.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapPeasFrame(i, &peasFrames, time.asSeconds());
+			SwapFrame(i, &peasFrames, time.asSeconds());
 		}
 		
 		//check second number
@@ -378,42 +381,17 @@ void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition)
 	}
 }
 
-void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time)
+template <typename T>
+void SwapFrame(T i, std::vector <Frame>* frames, float time)
 {
-	if (time - i->lastUpdateTime > ZOMBIE_FRAME_RATE)
-	{
-		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
-		if ((i->numberOfFrame) < (*frames).size() - 1)
-			i->numberOfFrame++;
-		else
-			i->numberOfFrame -= ((*frames).size() - 1);
-		i->lastUpdateTime = time;
-	}
-}
-
-void SwapSunflowerFrame(std::vector<Sunflower>::iterator i, std::vector <Frame>* frames, float time)
-{
-	if (time - i->lastUpdateTime > SUNFLOWER_FRAME_RATE)
-	{
-		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
-		if ((i->numberOfFrame) < (*frames).size() - 1)
-			i->numberOfFrame++;
-		else
-			i->numberOfFrame -= ((*frames).size() - 1);
-		i->lastUpdateTime = time;
-	}
-}
-
-void SwapPeasFrame(std::vector<Peas>::iterator i, std::vector <Frame>* frames, float time)
-{
-	if (time - i->lastUpdateTime > PEAS_FRAME_RATE)
-	{
-		i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
-		if ((i->numberOfFrame) < (*frames).size() - 1)
-			i->numberOfFrame++;
-		else
-			i->numberOfFrame -= ((*frames).size() - 1);
-		i->lastUpdateTime = time;
-	}
+    if (time - i->lastUpdateTime > FRAME_RATE)
+    {
+        i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
+        if ((i->numberOfFrame) < (*frames).size() - 1)
+            i->numberOfFrame++;
+        else
+            i->numberOfFrame -= ((*frames).size() - 1);
+        i->lastUpdateTime = time;
+    }
 }
 
