@@ -33,4 +33,3 @@ const sf::Vector2f ZOMBIE_SPEED(-0.3, 0);
 const int MAX_ZOMBIE_HEALTH = 7;
 const int MAX_SUNFLOWER_HEALTH = 10;
 const int MAX_PEAS_HEALTH = 10;
-
