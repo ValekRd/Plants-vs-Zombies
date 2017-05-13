@@ -35,4 +35,8 @@ const int MAX_ZOMBIE_HEALTH = 7;
 const int MAX_SUNFLOWER_HEALTH = 10;
 const int MAX_PEAS_HEALTH = 10;
 
+<<<<<<< HEAD
 const int MAX = 5;
+=======
+const int MAX = 6;
+>>>>>>> origin/master
