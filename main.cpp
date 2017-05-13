@@ -34,7 +34,7 @@ void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition);
 
 void FreeSunStopper(std::vector<Sun>::iterator i);
 
-int Sun::score = 10000;
+int Sun::score = 0;
 float Sun::lastCreateTime = 0;
 float Zombie::lastCreateTime = 0;
 float Peas::lastCreateTime = 0;
@@ -60,8 +60,7 @@ int main()
 	std::vector <Sunflower> sunflowers;
 	std::vector <Peas> peases;
 	while (window.isOpen())
-	{
-		
+    {
 		sf::Time time = clock.getElapsedTime();
 		window.draw(background.sprite);
 		window.draw(topPanel.sprite);
@@ -83,7 +82,6 @@ int main()
 				PlantingSunflower(&sunflowers, mousePosition, time.asSeconds());
 				CreateNewPeas(&peases, mousePosition, time.asSeconds());
 				PlantingPeas(&peases, mousePosition, time.asSeconds());
-				//cout << mousePosition.x << ' ' << mousePosition.y << endl;
 			}
 		}
 		SunflowerMoveWithMouse(&sunflowers, sf::Mouse::getPosition(window));
@@ -112,6 +110,7 @@ int main()
 			digitFrames[5].sprite.setPosition(259, 61);
 			window.draw(digitFrames[5].sprite);
 		}
+        
 		if (Sun::score % 100 / 10 == 0 && Sun::score > 50)
 		{
 			digitFrames[0].sprite.setPosition(259, 61);
