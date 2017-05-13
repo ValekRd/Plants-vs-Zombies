@@ -27,12 +27,6 @@ void SunflowerMoveWithMouse(vector <Sunflower>* sunflowers, sf::Vector2i mousePo
 
 void PeasMoveWithMouse(vector <Peas>* peases, sf::Vector2i mousePosition);
 
-void SwapSunflowerFrame(std::vector <Sunflower>::iterator i, std::vector <Frame>* frames, float time);
-
-void SwapPeasFrame(std::vector<Peas>::iterator i, std::vector <Frame>* frames, float time);
-
-void SwapZombieFrame(std::vector<Zombie>::iterator i, std::vector <Frame>* frames, float time);
-
 void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition);
 
 void FreeSunStopper(std::vector<Sun>::iterator i);
