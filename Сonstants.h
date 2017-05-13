@@ -22,7 +22,6 @@ const float FREE_SUN_MOVE_TIME = 3;
 const float ZOMBIE_FRAME_RATE = 0.05;
 const float SUNFLOWER_FRAME_RATE = 0.01; 
 const float PEAS_FRAME_RATE = 0.01;
-const float FRAME_RATE = 0.05;
 
 //speeds
 const sf::Vector2f SUN_SPEED(0, 1);

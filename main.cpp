@@ -7,7 +7,7 @@
 #include <string>
 
 template <typename T>
-void SwapFrame(T i, std::vector <Frame>* frames, float time);
+void SwapFrame(T i, std::vector <Frame>* frames, float time, float FrameRate);
 
 void Download(std::vector <Frame>* frames, int count, std::string nameOfFrameType);
 
@@ -86,7 +86,6 @@ int main()
 				PlantingSunflower(&sunflowers, mousePosition, time.asSeconds());
 				CreateNewPeas(&peases, mousePosition, time.asSeconds());
 				PlantingPeas(&peases, mousePosition, time.asSeconds());
-				//cout << mousePosition.x << ' ' << mousePosition.y << endl;
 			}
 		}
 		SunflowerMoveWithMouse(&sunflowers, sf::Mouse::getPosition(window));
@@ -95,18 +94,18 @@ int main()
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapFrame(i, &zombieFrames, time.asSeconds());
+			SwapFrame(i, &zombieFrames, time.asSeconds(), ZOMBIE_FRAME_RATE);
 			i->update(dt);
 		}
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
 		{
 			window.draw(i->sprite);
-			if (i->status == 1) SwapFrame(i, &sunflowerFrames, time.asSeconds());
+			if (i->status == 1) SwapFrame(i, &sunflowerFrames, time.asSeconds(), SUNFLOWER_FRAME_RATE);
 		}
 		for (auto i = peases.begin(); i != peases.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapFrame(i, &peasFrames, time.asSeconds());
+			SwapFrame(i, &peasFrames, time.asSeconds(), PEAS_FRAME_RATE);
 		}
 		
 		//check second number
@@ -244,7 +243,6 @@ void CreateNewPeas(std::vector <Peas>* peases, sf::Vector2i mousePosition, float
 			peases->push_back(peas);
 			Sun::score -= 100;
 			Peas::lastCreateTime = time;
-			cout << "create" << endl;
 		}
 		if (f == 1)
 			(*peases).erase((*peases).begin());
@@ -309,13 +307,6 @@ void SunflowerMoveWithMouse(vector <Sunflower>* sunflowers, sf::Vector2i mousePo
 
 void PlantingSunflower(vector <Sunflower>* sunflowers, sf::Vector2i mousePosition, float time)
 {
-	if ((*sunflowers).size() > 0 && (*sunflowers).back().status == 0) cout << "1 ";
-	else cout << "0 ";
-	if ((*sunflowers).size() > 0 &&  (time - Sunflower::lastCreateTime) > (*sunflowers).back().plantTime) cout << "1 ";
-	else cout << "0 ";
-	if (mousePosition.x > OFFSET.x && mousePosition.x < 978 && mousePosition.y > OFFSET.y && mousePosition.y < 569) cout << "1 ";
-	else cout << "0 ";
-	cout << endl;
 	if ((*sunflowers).size() > 0 && (*sunflowers).back().status == 0 && (time - Sunflower::lastCreateTime) > (*sunflowers).back().plantTime
 		&& mousePosition.x > OFFSET.x && mousePosition.x < 978 && mousePosition.y > OFFSET.y && mousePosition.y < 569)
 	{
@@ -382,9 +373,9 @@ void ClickOnSun(std::vector <Sun>* suns, sf::Vector2i mousePosition)
 }
 
 template <typename T>
-void SwapFrame(T i, std::vector <Frame>* frames, float time)
+void SwapFrame(T i, std::vector <Frame>* frames, float time, float FrameRate)
 {
-    if (time - i->lastUpdateTime > FRAME_RATE)
+    if (time - i->lastUpdateTime > FrameRate)
     {
         i->sprite.setTexture((*frames)[i->numberOfFrame].texture);
         if ((i->numberOfFrame) < (*frames).size() - 1)
