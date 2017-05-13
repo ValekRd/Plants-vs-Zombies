@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 // sizes
-const sf::Vector2i GRID(80, 96);   
-const sf::Vector2i OFFSET(258, 89);
+const sf::Vector2i GRID(80, 96);   //размеры квадратика на поле 
+const sf::Vector2i OFFSET(258, 89);			//координаты начала поля
 const int WINDOW_SIZE_X = 1024;
 const int WINDOW_SIZE_Y = 600;
 const int TOP_PANEL_POSITION_X = 230;
@@ -33,3 +33,4 @@ const sf::Vector2f ZOMBIE_SPEED(-0.3, 0);
 const int MAX_ZOMBIE_HEALTH = 7;
 const int MAX_SUNFLOWER_HEALTH = 10;
 const int MAX_PEAS_HEALTH = 10;
+

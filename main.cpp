@@ -1,4 +1,4 @@
-#include "Objects.h"
+﻿#include "Objects.h"
 #include "Сonstants.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -12,7 +12,7 @@ void CreateNewFreeSun(std::vector <Sun>* suns, float time, Frame* sunFrame);
 
 void CreateNewZombie(std::vector <Zombie>* zombies, float time);
 
-void CreateNewSunflower(std::vector <Sunflower>* sunflowers, sf::Vector2i mousePosition, float time);
+void CreateNewSunflower(std::vector <Sunflower>* sunflowers, sf::Vector2i mousePosition, float time, Frame* sunflowerFrame);
 
 void CreateNewPeas(std::vector <Peas>* peases, sf::Vector2i mousePosition, float time);
 
@@ -44,7 +44,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "My Plants VS Zombies");
 	Object background(0, 0, "fone.png", NULL_SPEED);
 	Object topPanel(TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
-	vector <Frame> digitFrames(0);
+	std::vector <Frame> digitFrames(0);
 	std::vector <Frame> sunflowerFrames(0);
 	std::vector <Frame> zombieFrames(0);
 	std::vector <Frame> peasFrames(0);
@@ -79,11 +79,11 @@ int main()
 			{
 				sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 				ClickOnSun(&suns, mousePosition);
-				CreateNewSunflower(&sunflowers, mousePosition, time.asSeconds());
+				CreateNewSunflower(&sunflowers, mousePosition, time.asSeconds(), &sunflowerFrames[0]);
 				PlantingSunflower(&sunflowers, mousePosition, time.asSeconds());
 				CreateNewPeas(&peases, mousePosition, time.asSeconds());
 				PlantingPeas(&peases, mousePosition, time.asSeconds());
-				cout << mousePosition.x << ' ' << mousePosition.y << endl;
+				//cout << mousePosition.x << ' ' << mousePosition.y << endl;
 			}
 		}
 		SunflowerMoveWithMouse(&sunflowers, sf::Mouse::getPosition(window));
@@ -98,7 +98,7 @@ int main()
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapSunflowerFrame(i, &sunflowerFrames, time.asSeconds());
+			if (i->status == 1) SwapSunflowerFrame(i, &sunflowerFrames, time.asSeconds());
 		}
 		for (auto i = peases.begin(); i != peases.end(); i++)
 		{
@@ -107,7 +107,7 @@ int main()
 		}
 		
 		//check second number
-		if (Sun::score % 100 / 10 == 5)
+		/*if (Sun::score % 100 / 10 == 5)
 		{
 			digitFrames[5].sprite.setPosition(259, 61);
 			window.draw(digitFrames[5].sprite);
@@ -125,7 +125,7 @@ int main()
 				digitFrames[i].sprite.setPosition(248, 61);
 				window.draw(digitFrames[i].sprite);
 			}
-		}
+		}   */
 		for (auto i = suns.begin(); i != suns.end(); i++)
 		{
 			window.draw(i->sprite);
@@ -255,14 +255,14 @@ void PlantingPeas(vector <Peas>* peases, sf::Vector2i mousePosition, float time)
 	{
 		int x = int((mousePosition.x - OFFSET.x) / GRID.x);
 		int y = int((mousePosition.y - OFFSET.y) / GRID.y);
-		x = OFFSET.x + x * GRID.x + GRID.x / 2 - 36;
-		y = OFFSET.y + y * GRID.y + GRID.y / 2 - 50;
+		x = OFFSET.x + x * GRID.x + GRID.x / 2 - 32;
+		y = OFFSET.y + y * GRID.y + GRID.y / 2 - 40;
 		(*peases).back().sprite.setPosition(x, y);
 		(*peases).back().status = 1;
 	}
 }
 
-void CreateNewSunflower(std::vector <Sunflower>* sunflowers, sf::Vector2i mousePosition, float time)
+void CreateNewSunflower(std::vector <Sunflower>* sunflowers, sf::Vector2i mousePosition, float time, Frame* sunflowerFrame)
 {
 	if (mousePosition.x > 305 && mousePosition.x < 346 && mousePosition.y > 9 && mousePosition.y < 69)
 	{
@@ -275,9 +275,9 @@ void CreateNewSunflower(std::vector <Sunflower>* sunflowers, sf::Vector2i mouseP
 		}
 		if ((*sunflowers).size() > 0 && (*sunflowers).back().status == 1 && Sun::score >= 50)
 		{
-			Sunflower sunflower((float)mousePosition.x, (float)mousePosition.y, "sunflower/0.png", NULL_SPEED, time);
-			sunflower.sprite.setScale(0.75f, 0.75f);
-			sunflowers->push_back(sunflower);
+			sunflowers->push_back(Sunflower ((float)mousePosition.x, (float)mousePosition.y, "sunflower/0.png", NULL_SPEED, time));
+			sunflowers->back().sprite.setTexture((*sunflowerFrame).texture);
+			sunflowers->back().sprite.setScale(0.75f, 0.75f);
 			Sun::score -= 50;
 			Sunflower::lastCreateTime = time;
 		}
@@ -288,6 +288,7 @@ void CreateNewSunflower(std::vector <Sunflower>* sunflowers, sf::Vector2i mouseP
 
 void PeasMoveWithMouse(vector <Peas>* peases, sf::Vector2i mousePosition)
 {
+	mousePosition += sf::Vector2i(-30, -30);
 	if (((*peases).size() > 0) && (*peases).back().status == 0)
 	{
 		(*peases).back().sprite.setPosition(mousePosition.x, mousePosition.y);
@@ -296,6 +297,7 @@ void PeasMoveWithMouse(vector <Peas>* peases, sf::Vector2i mousePosition)
 
 void SunflowerMoveWithMouse(vector <Sunflower>* sunflowers, sf::Vector2i mousePosition)
 {
+	mousePosition += sf::Vector2i(-30, -30);
 	if (((*sunflowers).size() > 0) && (*sunflowers).back().status == 0)
 	{
 		(*sunflowers).back().sprite.setPosition(mousePosition.x, mousePosition.y);
@@ -304,6 +306,13 @@ void SunflowerMoveWithMouse(vector <Sunflower>* sunflowers, sf::Vector2i mousePo
 
 void PlantingSunflower(vector <Sunflower>* sunflowers, sf::Vector2i mousePosition, float time)
 {
+	if ((*sunflowers).size() > 0 && (*sunflowers).back().status == 0) cout << "1 ";
+	else cout << "0 ";
+	if ((*sunflowers).size() > 0 &&  (time - Sunflower::lastCreateTime) > (*sunflowers).back().plantTime) cout << "1 ";
+	else cout << "0 ";
+	if (mousePosition.x > OFFSET.x && mousePosition.x < 978 && mousePosition.y > OFFSET.y && mousePosition.y < 569) cout << "1 ";
+	else cout << "0 ";
+	cout << endl;
 	if ((*sunflowers).size() > 0 && (*sunflowers).back().status == 0 && (time - Sunflower::lastCreateTime) > (*sunflowers).back().plantTime
 		&& mousePosition.x > OFFSET.x && mousePosition.x < 978 && mousePosition.y > OFFSET.y && mousePosition.y < 569)
 	{
@@ -311,7 +320,7 @@ void PlantingSunflower(vector <Sunflower>* sunflowers, sf::Vector2i mousePositio
 		int y = int((mousePosition.y - OFFSET.y) / GRID.y);
 		x = OFFSET.x + x * GRID.x + GRID.x / 2 - 36;
 		y = OFFSET.y + y * GRID.y + GRID.y / 2 - 50;
-		(*sunflowers).back().sprite.setPosition(x, y);
+		(*sunflowers).back().sprite.setPosition(x,y);
 		(*sunflowers).back().lastCreateSunTime = time;
 		(*sunflowers).back().status = 1;
 	}
