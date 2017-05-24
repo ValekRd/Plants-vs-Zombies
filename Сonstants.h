@@ -13,7 +13,7 @@ const int NUM_OF_SUNFLOWER_FRAMES = 60;
 const int NUM_OF_PEAS_FRAMES = 60;
 //times
 const float TIME_PLANTING = 0.5;
-const float FREE_FROM_ZOMBIES_TIME = 0;
+const float FREE_FROM_ZOMBIES_TIME = 3;
 const float INTEERVAL_BETWEEN_ZOMBIE_GENERATION = 4;
 const float INTERVAL_BETWEEN_FREE_SUN_GENERATION = 4;
 const float INTERVAL_BETWEEN_SUN_GENERATION = 5;
@@ -23,14 +23,16 @@ const float FREE_SUN_MOVE_TIME = 3;
 const float ZOMBIE_FRAME_RATE = 0.05;
 const float SUNFLOWER_FRAME_RATE = 0.01; 
 const float PEAS_FRAME_RATE = 0.01;
+const float SHOOT_RATE = 0.5;
 
 //speeds
 const sf::Vector2f SUN_SPEED(0, 1);
 const sf::Vector2f NULL_SPEED(0, 0);
 const sf::Vector2f ZOMBIE_SPEED(-0.3, 0);
+const sf::Vector2f BULLET_SPEED(2, 0);
 //distances
 
 //healthes
-const int MAX_ZOMBIE_HEALTH = 7;
+const int MAX_ZOMBIE_HEALTH = 5;
 const int MAX_SUNFLOWER_HEALTH = 10;
 const int MAX_PEAS_HEALTH = 10;

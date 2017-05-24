@@ -34,7 +34,8 @@ public:
 	static float lastCreateTime;
 	float lastUpdateTime;
 	int numberOfFrame;
-	Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime);
+	int numberOfLine;
+	Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime, int numberOfLine);
 };
 class Sunflower : public Object
 {
@@ -57,6 +58,8 @@ public:
 	int numberOfFrame;
 	float lastUpdateTime;
 	float plantTime;
+	int numberOfLine;
+	float lastShootTime;
 	Peas(float x, float y, std::string filename, sf::Vector2f speed, float plantTime);
 };
 
@@ -69,10 +72,9 @@ public:
 	Frame();
 };
 
-/*
 class Bullet : public Object
 {
 public:
-	int create_time;
+	int numberOfLine;
+	Bullet(float x, float y, std::string filename, sf::Vector2f speed, int numberOfLine);
 };
- */

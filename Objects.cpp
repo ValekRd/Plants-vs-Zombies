@@ -22,17 +22,22 @@ void Object::update(float dt)
 	pos += speed * dt;
 	sprite.setPosition(pos.x, pos.y);
 }
+Bullet::Bullet(float x, float y, std::string filename, sf::Vector2f speed, int numberOfLine) : Object(x, y, filename, speed)
+{
+	this->numberOfLine = numberOfLine;
+}
 Sun::Sun(float x, float y, std::string filename, sf::Vector2f speed, float CreateTime, int WhoseSun) : Object(x, y, filename, speed)
 {
 	this->createTime = CreateTime;
 	this->whoseSun = WhoseSun;
 }
-Zombie::Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime) : Object(x, y, filename, speed)
+Zombie::Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime, int numberOfLine) : Object(x, y, filename, speed)
 {
 	this->createTime = createTime;
 	this->health = MAX_ZOMBIE_HEALTH;
 	this->numberOfFrame = 0;
 	this->lastUpdateTime = 0;
+	this->numberOfLine = numberOfLine;
 };
 Sunflower::Sunflower(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)
 {
@@ -50,6 +55,8 @@ Peas::Peas(float x, float y, std::string filename, sf::Vector2f speed, float pla
 	this->plantTime = 0;
 	this->lastCreateTime = plantTime;
 	this->lastUpdateTime = 0;
+	this->numberOfLine = 0;
+	this->lastShootTime = 0;
 	this->status = 0;
 }
 Frame::Frame(string filename)
