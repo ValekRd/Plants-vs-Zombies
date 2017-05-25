@@ -91,7 +91,7 @@ int main()
     font.loadFromFile("images/fonts/font.ttf");
     sf::Text score("", font, 22);
     //score.setFillColor(sf::Color::Black);
-	score.setColor(sf::Color::Black);
+	//score.setFillColor(sf::Color::Black);
     score.setString("0");
     score.setStyle(sf::Text::Bold);
     score.setPosition(266, 59);
@@ -275,8 +275,8 @@ void CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, s
         FontZoombie.loadFromFile("images/fonts/gameover.ttf");
         sf::Text gameover1("The Zombie", FontZoombie, 100);
         sf::Text gameover2("ATE YOUR BRAINS", FontZoombie, 100);
-        gameover1.setColor(sf::Color::Black);
-        gameover2.setColor(sf::Color::Black);
+        //gameover1.setColor(sf::Color::Black);
+        //gameover2.setColor(sf::Color::Black);
         gameover1.setPosition(250, 200);
         gameover2.setPosition(100, 300);
         
@@ -314,10 +314,7 @@ void ZombieShooting(std::vector <Bullet>& bullets)
 	{
 		for (std::vector <Bullet>::iterator it = bullets.begin(); it != bullets.end(); it++)
 		{
-			float A = it->pos.x;
-			int num = it->numberOfLine;
-			float B = (zombieForKilling[num])->pos.x;
-			if (A > B)
+			if (it->pos.x > zombieForKilling[it->numberOfLine]->pos.x)
 			{
 				zombieForKilling[it->numberOfLine]->health -= 1;
 				it = bullets.erase(it);
