@@ -56,6 +56,7 @@ Sunflower::Sunflower(float x, float y, std::string filename, sf::Vector2f speed,
 	this->plantTime = 0;
 	this->lastUpdateTime = 0;
 	this->status = 0;
+	this->numberOfLine = 0;
 }
 
 Nut::Nut(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)
@@ -64,6 +65,7 @@ Nut::Nut(float x, float y, std::string filename, sf::Vector2f speed, float plant
     this->health = MAX_NUT_HEALTH;
     this->plantTime = 0;
     this->status = 0;
+	this->numberOfLine = 0;
 }
 
 Peas::Peas(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)

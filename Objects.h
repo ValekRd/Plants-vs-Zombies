@@ -48,6 +48,7 @@ public:
 	static float lastCreateTime;
 	int health;
 	int numberOfFrame;
+	int numberOfLine;
 	float lastUpdateTime;
 	float lastCreateSunTime;
 	float plantTime;
@@ -74,6 +75,7 @@ public:
     static float lastCreateTime;
     int health;
     int numberOfFrame;
+	int numberOfLine;
     float plantTime;
     Nut(float x, float y, std::string filename, sf::Vector2f speed, float plantTime);
 };
