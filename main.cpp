@@ -171,7 +171,6 @@ int main()
 			i->update(dt);
 			if (i->health < 0)
 			{
-				cout << "here" << endl;
 				i = zombies.erase(i);
 				if (i == zombies.end())
                     break;
