@@ -36,6 +36,8 @@ public:
 	float lastUpdateTime;
 	int numberOfFrame;
 	int numberOfLine;
+	int status;
+	float lastEatingTime;
 	Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime, int numberOfLine);
     void stop();
 };
