@@ -33,10 +33,6 @@ void PlantingPeas(std::vector <Peas>& peases, sf::Vector2i mousePosition, float 
 
 void PlantingNut(std::vector <Nut>& nuts, sf::Vector2i mousePosition, float time, sf::Sound& plant);
 
-void SunflowerMoveWithMouse(std::vector <Sunflower>& sunflowers, sf::Vector2i mousePosition);
-
-void PeasMoveWithMouse(std::vector <Peas>& peases, sf::Vector2i mousePosition);
-
 void ClickOnSun(std::vector <Sun>& suns, sf::Vector2i mousePosition, sf::Text& score, sf::Sound& getSun);
 
 void FreeSunStopper(std::vector<Sun>::iterator i);
@@ -47,17 +43,20 @@ void CallShoot(vector <Zombie>& zombies);
 
 void CreateNewBullet(std::vector <Peas>::iterator i, vector <Bullet>& bullets, Frame& peaFrame, sf::Sound& shoot, float time);
 
-void ZombieShooting(std::vector <Bullet>& bullets);
+void ZombieShooting(std::vector <Bullet>& bullets, sf::Sound& kernelpult);
 
 void AccountUpdate(sf::Text& score);
 
 bool CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, sf::Music& music, sf::Music& losemusic);
 
-void NutMoveWithMouse(std::vector <Nut>& nuts, sf::Vector2i mousePosition);
+template <typename T>
+void MoveWithMouse(T& vec, sf::Vector2i mousePosition);
 
-void CallEat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases);
+template <typename T>
+void CallEat(std::vector <Zombie>::iterator i, T& peases);
 
-void Eat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases, float time);
+template <typename T>
+void Eat(std::vector <Zombie>::iterator i, T& peases, float time, sf::Sound& chomp);
 
 int Sun::score = 10000;
 int gameStatus = 0;
@@ -86,7 +85,7 @@ int main()
 	Frame peaFrame("pea.png");
 	Download(sunflowerFrames, NUM_OF_SUNFLOWER_FRAMES, "sunFlower");
 	Download(zombieFrames, NUM_OF_ZOMBIE_FRAMES, "zombie");
-	Download(zombieEatFrames, NUM_OF_ZOMBIE_EAT_FRAMES, "zombieEat");
+	Download(zombieEatFrames, NUM_OF_ZOMBIE_EAT_FRAMES, "zombieEat1");
 	Download(zombieDieFrames, NUM_OF_ZOMBIE_DIE_FRAMES, "zombieDie");
 	Download(peasFrames, NUM_OF_PEAS_FRAMES, "peas");
     Download(peasFramesIdle, NUM_OF_PEAS_FRAMES, "peasIdle");
@@ -98,8 +97,8 @@ int main()
 	sf::Font font;
 	font.loadFromFile("images/fonts/font.ttf");
 	sf::Text score("", font, 22);
-	score.setColor(sf::Color::Black);
-	score.setColor(sf::Color::Black);
+	score.setFillColor(sf::Color::Black);
+	score.setFillColor(sf::Color::Black);
 	score.setString("0");
 	score.setStyle(sf::Text::Bold);
 	score.setPosition(266, 59);
@@ -115,12 +114,18 @@ int main()
 	sf::SoundBuffer plantBuffer;
 	sf::SoundBuffer sunBuffer;
 	sf::SoundBuffer shootBuffer;
+    sf::SoundBuffer chompBuffer;
+    sf::SoundBuffer kernelpultBuffer;
 	plantBuffer.loadFromFile("music/plant.ogg");
 	sunBuffer.loadFromFile("music/points.ogg");
 	shootBuffer.loadFromFile("music/shoot.ogg");
+    chompBuffer.loadFromFile("music/chomp.ogg");
+    kernelpultBuffer.loadFromFile("music/kernelpult.ogg");
 	sf::Sound plant(plantBuffer);
 	sf::Sound getSun(sunBuffer);
 	sf::Sound shoot(shootBuffer);
+    sf::Sound chomp(chompBuffer);
+    sf::Sound kernelpult(kernelpultBuffer);
 
     sf::Clock clock;
 	std::vector <Sun> suns;
@@ -157,9 +162,9 @@ int main()
 			}
 		}
 
-		SunflowerMoveWithMouse(sunflowers, sf::Mouse::getPosition(window));
-		PeasMoveWithMouse(peases, sf::Mouse::getPosition(window));
-        NutMoveWithMouse(nuts, sf::Mouse::getPosition(window));
+		MoveWithMouse(sunflowers, sf::Mouse::getPosition(window));
+		MoveWithMouse(peases, sf::Mouse::getPosition(window));
+        MoveWithMouse(nuts, sf::Mouse::getPosition(window));
     		
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
@@ -174,7 +179,7 @@ int main()
 			if (i->status == 1)
 			{
 				SwapFrame(i, zombieEatFrames, time.asSeconds(), ZOMBIE_FRAME_RATE); 
-				Eat(i, peases, time.asSeconds());
+				Eat(i, peases, time.asSeconds(), chomp);
 			}
 			i->update(dt);
 			if (i->health == 0)
@@ -195,7 +200,6 @@ int main()
                 break;
             }
             
-            
 		}
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
 		{
@@ -215,7 +219,7 @@ int main()
 					CreateNewBullet(i, bullets, peaFrame, shoot, time.asSeconds());
 				}
 
-				ZombieShooting(bullets);
+				ZombieShooting(bullets, kernelpult);
 			}
             else if (i->status == 1)
             {
@@ -252,6 +256,16 @@ int main()
 }
 
 template <typename T>
+void MoveWithMouse(T& vec, sf::Vector2i mousePosition)
+{
+    mousePosition += sf::Vector2i(-30, -30);
+    if ((vec.size() > 0) && vec.back().status == 0)
+    {
+        vec.back().sprite.setPosition(mousePosition.x, mousePosition.y);
+    }
+}
+
+template <typename T>
 void CallEat(std::vector <Zombie>::iterator i, T& vec)
 {
 	for (auto it = vec.begin(); it != vec.end(); it++)
@@ -265,13 +279,16 @@ void CallEat(std::vector <Zombie>::iterator i, T& vec)
 	}
 }
 template <typename T>
-void Eat(std::vector <Zombie>::iterator i, T& vec, float time)
+void Eat(std::vector <Zombie>::iterator i, T& vec, float time, sf::Sound& chomp)
 {
 	for (auto it = vec.begin(); it != vec.end(); it++)
 	{
 		if (i->numberOfFrame == 12 && (time - i->lastEatingTime > ZOMBIE_FRAME_RATE))  
 		{
 			it->health -= 1;
+            
+            chomp.play();
+            
 			i->lastEatingTime = time;
 		}
 		if (it->health <= 0)
@@ -282,14 +299,6 @@ void Eat(std::vector <Zombie>::iterator i, T& vec, float time)
 			if (it == vec.end()) break;
 		}
 	}
-}
-void NutMoveWithMouse(std::vector <Nut>& nuts, sf::Vector2i mousePosition)
-{
-    mousePosition += sf::Vector2i(-30, -30);
-    if ((nuts.size() > 0) && nuts.back().status == 0)
-    {
-        nuts.back().sprite.setPosition(mousePosition.x, mousePosition.y);
-    }
 }
 
 void CreateNewNut(std::vector <Nut>& nuts, sf::Vector2i mousePosition, float time, Frame& nutFrame, sf::Text& score)
@@ -325,8 +334,8 @@ bool CheckGameEnd(std::vector <Zombie>::iterator i, sf::RenderWindow& window, sf
         FontZoombie.loadFromFile("images/fonts/gameover.ttf");
         sf::Text gameover1("The Zombie", FontZoombie, 100);
         sf::Text gameover2("ATE YOUR BRAINS", FontZoombie, 100);
-        gameover1.setColor(sf::Color::Black);
-        gameover2.setColor(sf::Color::Black);
+        gameover1.setFillColor(sf::Color::Black);
+        gameover2.setFillColor(sf::Color::Black);
         gameover1.setPosition(250, 200);
         gameover2.setPosition(100, 300);
         
@@ -369,14 +378,16 @@ void AccountUpdate(sf::Text& score)
 
 }
 
-void ZombieShooting(std::vector <Bullet>& bullets)
+void ZombieShooting(std::vector <Bullet>& bullets, sf::Sound& kernelpult)
 {
 	for (std::vector <Bullet>::iterator it = bullets.begin(); it != bullets.end(); it++)
 	{
 		if (it->pos.x > zombieForKilling[it->numberOfLine]->pos.x)
 		{
 				zombieForKilling[it->numberOfLine]->health -= 1;
-                //std::cout << zombieForKilling[it->numberOfLine]->health << std::endl;
+            
+            kernelpult.play();
+            
 				it = bullets.erase(it);
 				if (it == bullets.end())
 					break;
@@ -500,24 +511,6 @@ void PlantingNut(vector <Nut>& nuts, sf::Vector2i mousePosition, float time, sf:
     }
 }
 
-void PeasMoveWithMouse(vector <Peas>& peases, sf::Vector2i mousePosition)
-{
-	mousePosition += sf::Vector2i(-30, -30);
-	if ((peases.size() > 0) && peases.back().status == 0)
-	{
-		peases.back().sprite.setPosition(mousePosition.x, mousePosition.y);
-	}
-}
-
-void SunflowerMoveWithMouse(vector <Sunflower>& sunflowers, sf::Vector2i mousePosition)
-{
-	mousePosition += sf::Vector2i(-30, -30);
-	if ((sunflowers.size() > 0) && sunflowers.back().status == 0)
-	{
-		sunflowers.back().sprite.setPosition(mousePosition.x, mousePosition.y);
-	}
-}
-
 void PlantingSunflower(vector <Sunflower>& sunflowers, sf::Vector2i mousePosition, float time, sf::Sound& plant)
 {
 	if (sunflowers.size() > 0 && sunflowers.back().status == 0 && (time - Sunflower::lastCreateTime) > sunflowers.back().plantTime
@@ -599,7 +592,6 @@ void ClickOnSun(std::vector <Sun>& suns, sf::Vector2i mousePosition, sf::Text& s
 		}
 	}
 }
-
 
 template <typename T>
 void SwapFrame(T i, std::vector <Frame>& frames, float time, float FrameRate)

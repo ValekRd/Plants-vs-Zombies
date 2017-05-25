@@ -37,7 +37,7 @@ const sf::Vector2f BULLET_SPEED(2, 0);
 //distances
 
 //healthes
-const int MAX_ZOMBIE_HEALTH = 5;
+const int MAX_ZOMBIE_HEALTH = 10;
 const int MAX_NUT_HEALTH = 25;
 const int MAX_SUNFLOWER_HEALTH = 5;
 const int MAX_PEAS_HEALTH = 5;
