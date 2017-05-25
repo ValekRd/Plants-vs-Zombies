@@ -17,9 +17,9 @@ void SwapFrame(T i, std::vector <Frame>& frames, float time, float FrameRate);
 
 void Download(std::vector <Frame>& frames, int count, std::string nameOfFrameType);
 
-void CreateNewFreeSun(std::vector <Sun>& suns, float time, Frame* sunFrame);
+void CreateNewFreeSun(std::vector <Sun>& suns, float time, Frame& sunFrame);
 
-void CreateNewZombie(std::vector <Zombie>* zombies, float time);
+void CreateNewZombie(std::vector <Zombie>& zombies, float time);
 
 void CreateNewSunflower(std::vector <Sunflower>& sunflowers, sf::Vector2i mousePosition, float time, Frame& sunflowerFrame, sf::Text& score);
 
@@ -41,13 +41,13 @@ void ClickOnSun(std::vector <Sun>& suns, sf::Vector2i mousePosition, sf::Text& s
 
 void FreeSunStopper(std::vector<Sun>::iterator i);
 
-void CreateNewSun(std::vector <Sun>& suns, float time, Frame* sunFrame, std::vector <Sunflower>::iterator i);
+void CreateNewSun(std::vector <Sun>& suns, float time, Frame& sunFrame, std::vector <Sunflower>::iterator i);
 
-void CallShoot(vector <Zombie>* zombies);
+void CallShoot(vector <Zombie>& zombies);
 
 void CreateNewBullet(std::vector <Peas>::iterator i, vector <Bullet>& bullets, Frame& peaFrame, sf::Sound& shoot);
 
-void ZombieShooting(std::vector <Bullet>* bullets);
+void ZombieShooting(std::vector <Bullet>& bullets);
 
 void AccountUpdate(sf::Text& score);
 
@@ -62,8 +62,8 @@ float Zombie::lastCreateTime = 0;
 float Peas::lastCreateTime = 0;
 float Sunflower::lastCreateTime = 0;
 static int callShoot[5];
-//static std::vector <Zombie>::iterator zombieForKilling[5];
-static Zombie* zombieForKilling[5];
+static std::vector <Zombie>::iterator zombieForKilling[5];
+
 int main()
 {
 	for (int i = 0; i < 5; i++) callShoot[i] = 0;
@@ -90,7 +90,8 @@ int main()
     sf::Font font;
     font.loadFromFile("images/fonts/font.ttf");
     sf::Text score("", font, 22);
-    score.setFillColor(sf::Color::Black);
+    //score.setFillColor(sf::Color::Black);
+	score.setColor(sf::Color::Black);
     score.setString("0");
     score.setStyle(sf::Text::Bold);
     score.setPosition(266, 59);
@@ -134,9 +135,9 @@ int main()
 		sf::Time time = clock.getElapsedTime();
 		window.draw(background.sprite);
 		window.draw(topPanel.sprite);
-		CreateNewFreeSun(suns, time.asSeconds(), &sunFrame);
-		CreateNewZombie(&zombies, time.asSeconds());
-		CallShoot(&zombies);
+		CreateNewFreeSun(suns, time.asSeconds(), sunFrame);
+		CreateNewZombie(zombies, time.asSeconds());
+		CallShoot(zombies);
 		
 
 		sf::Event event;
@@ -156,6 +157,8 @@ int main()
                 PlantingNut(nuts, mousePosition, time.asSeconds(), plant);
 			}
 		}
+
+
 		SunflowerMoveWithMouse(sunflowers, sf::Mouse::getPosition(window));
 		PeasMoveWithMouse(peases, sf::Mouse::getPosition(window));
         NutMoveWithMouse(nuts, sf::Mouse::getPosition(window));
@@ -168,8 +171,9 @@ int main()
 			i->update(dt);
 			if (i->health < 0)
 			{
-				//i = zombies.erase(i);
-				// (i == zombies.end()) break;
+				cout << "here" << endl;
+				i = zombies.erase(i);
+				if (i == zombies.end()) break;
 			}
             
             CheckGameEnd (i, window, music, losemusic);
@@ -179,7 +183,7 @@ int main()
 		{
 			window.draw(i->sprite);
 			if (i->status == 1) SwapFrame(i, sunflowerFrames, time.asSeconds(), SUNFLOWER_FRAME_RATE);
-			CreateNewSun(suns, time.asSeconds(), &sunFrame, i);
+			CreateNewSun(suns, time.asSeconds(), sunFrame, i);
 			if (i->status == 1) SwapFrame(i, sunflowerFrames, time.asSeconds(), SUNFLOWER_FRAME_RATE);
 		}
 		for (auto i = peases.begin(); i != peases.end(); i++)
@@ -188,8 +192,12 @@ int main()
 			if (i->status == 1 && callShoot[i->numberOfLine] == 1)
 			{
 				SwapFrame(i, peasFrames, time.asSeconds(), PEAS_FRAME_RATE);
-				if (i->numberOfFrame == 33) CreateNewBullet(i, bullets, peaFrame, shoot);
-				//ZombieShooting(&bullets);
+				if (i->numberOfFrame == 33)
+				{
+					CreateNewBullet(i, bullets, peaFrame, shoot);
+				}
+
+				ZombieShooting(bullets);
 			}
             else if (i->status == 1)
             {
@@ -208,13 +216,10 @@ int main()
 			i->update(dt);
 		}
 
-        
         ///////////////////////SCORE/////////
         window.draw(score);
         ///////////END_SCORE/////////////////
-        
-        
-        
+		
 		for (auto i = suns.begin(); i != suns.end(); i++)
 		{
 			window.draw(i->sprite);
@@ -222,7 +227,6 @@ int main()
 			if (time.asSeconds() - i->createTime > FREE_SUN_MOVE_TIME)
 				FreeSunStopper(i);
 		}
-		
 		window.display();		
 	}
 
@@ -271,8 +275,8 @@ void CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, s
         FontZoombie.loadFromFile("images/fonts/gameover.ttf");
         sf::Text gameover1("The Zombie", FontZoombie, 100);
         sf::Text gameover2("ATE YOUR BRAINS", FontZoombie, 100);
-        gameover1.setFillColor(sf::Color::Black);
-        gameover2.setFillColor(sf::Color::Black);
+        gameover1.setColor(sf::Color::Black);
+        gameover2.setColor(sf::Color::Black);
         gameover1.setPosition(250, 200);
         gameover2.setPosition(100, 300);
         
@@ -304,16 +308,24 @@ void AccountUpdate(sf::Text& score)
 
 }
 
-void ZombieShooting(std::vector <Bullet>* bullets)
+void ZombieShooting(std::vector <Bullet>& bullets)
 {
-	for (std::vector <Bullet>::iterator it = (*bullets).begin(); it <= (*bullets).end(); it++)
+	if (bullets.size() > 0)
 	{
-		if (it->pos.x > zombieForKilling[it->numberOfLine]->pos.x)
+		for (std::vector <Bullet>::iterator it = bullets.begin(); it != bullets.end(); it++)
 		{
-			zombieForKilling[it->numberOfLine]->health -= 1;
-			it = (*bullets).erase(it);
-			if (it == (*bullets).end())
-				break;
+			float A = it->pos.x;
+			int num = it->numberOfLine;
+			float B = (zombieForKilling[num])->pos.x;
+			if (A > B)
+			{
+				zombieForKilling[it->numberOfLine]->health -= 1;
+				it = bullets.erase(it);
+				if (it == bullets.end())
+				{
+					break;
+				}
+			}
 		}
 	}
 }
@@ -327,30 +339,23 @@ void CreateNewBullet(std::vector <Peas>::iterator i, vector <Bullet>& bullets, F
     shoot.play();
 }
 
-void CallShoot(vector <Zombie>* zombies)
+void CallShoot(vector <Zombie>& zombies)
 {
-	if ((*zombies).size() > 0)
+	if (zombies.size() > 0)
 	{
-		std::vector <Zombie>::iterator firstZombieForKilling;
 		int i = 0;
 		while (i < 5)
 		{
-			firstZombieForKilling = find_if((*zombies).begin(), (*zombies).end(), [&](const Zombie& zombie)
+			zombieForKilling[i] = find_if(zombies.begin(), zombies.end(), [&](const Zombie& zombie)
 			{
 				return (zombie.numberOfLine == i) ? true : false;
 			});
-			if (((firstZombieForKilling >= (*zombies).begin() && firstZombieForKilling < (*zombies).end()) ||
-				((*zombies).back().numberOfLine == i)))
-			{
-				callShoot[i] = 1;
-				i++;
-			}
+			if (((zombieForKilling[i] >= zombies.begin() && zombieForKilling[i] < zombies.end()) ||
+					(zombies.back().numberOfLine == i)))
+			callShoot[i] = 1;
 			else
-			{
-				callShoot[i] = 0;
-				i += 2;
-			}
-			//zombieForKilling[i] = firstZombieForKilling;
+			callShoot[i] = 0;
+			i++;
 		}
 	}
 }
@@ -473,22 +478,22 @@ void PlantingSunflower(vector <Sunflower>& sunflowers, sf::Vector2i mousePositio
 	}
 }
 
-void CreateNewSun(std::vector <Sun>& suns, float time, Frame* sunFrame, std::vector <Sunflower>::iterator i)
+void CreateNewSun(std::vector <Sun>& suns, float time, Frame& sunFrame, std::vector <Sunflower>::iterator i)
 {
 	if ((i->status == 1) && (time - i->lastCreateSunTime > INTERVAL_BETWEEN_SUN_GENERATION))
 	{
 		suns.push_back(Sun(i->pos.x - 10, i->pos.y - 45, "sun.png", NULL_SPEED, time, 0));
-		suns.back().sprite.setTexture((*sunFrame).texture);
+		suns.back().sprite.setTexture(sunFrame.texture);
 		i->lastCreateSunTime = time;
 	}
 }
 
-void CreateNewFreeSun(std::vector <Sun>& suns, float time, Frame *sunFrame)
+void CreateNewFreeSun(std::vector <Sun>& suns, float time, Frame& sunFrame)
 {
 	if (time - Sun::lastCreateTime > INTERVAL_BETWEEN_FREE_SUN_GENERATION)
 	{
 		suns.push_back(Sun(rand() % (9 * GRID.x) + OFFSET.x, rand() % (2 * GRID.y) + OFFSET.y, "sun.png", SUN_SPEED, time, 0));
-		suns.back().sprite.setTexture((*sunFrame).texture);
+		suns.back().sprite.setTexture(sunFrame.texture);
 		Sun::lastCreateTime = time;
 	}
 }
@@ -510,12 +515,12 @@ void FreeSunStopper(std::vector<Sun>::iterator i)
 	i->speed.y = 0;
 }
 
-void CreateNewZombie(std::vector <Zombie>* zombies, float time)
+void CreateNewZombie(std::vector <Zombie>& zombies, float time)
 {
 	if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 	{
 		int numberOfLine = rand() % 5;
-		zombies->push_back(Zombie (800, (numberOfLine+1)*GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time, numberOfLine));
+		zombies.push_back(Zombie (800, (numberOfLine+1)*GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time, numberOfLine));
 		Zombie::lastCreateTime = time;
 	}
 }
