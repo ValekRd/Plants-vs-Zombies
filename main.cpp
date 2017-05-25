@@ -45,7 +45,7 @@ void CreateNewSun(std::vector <Sun>& suns, float time, Frame& sunFrame, std::vec
 
 void CallShoot(vector <Zombie>& zombies);
 
-void CreateNewBullet(std::vector <Peas>::iterator i, vector <Bullet>& bullets, Frame& peaFrame, sf::Sound& shoot);
+void CreateNewBullet(std::vector <Peas>::iterator i, vector <Bullet>& bullets, Frame& peaFrame, sf::Sound& shoot, float time);
 
 void ZombieShooting(std::vector <Bullet>& bullets);
 
@@ -173,10 +173,12 @@ int main()
 			{
 				cout << "here" << endl;
 				i = zombies.erase(i);
-				if (i == zombies.end()) break;
+				if (i == zombies.end())
+                    break;
 			}
             
-            CheckGameEnd (i, window, music, losemusic);
+            
+            //CheckGameEnd (i, window, music, losemusic);
             
 		}
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
@@ -192,9 +194,9 @@ int main()
 			if (i->status == 1 && callShoot[i->numberOfLine] == 1)
 			{
 				SwapFrame(i, peasFrames, time.asSeconds(), PEAS_FRAME_RATE);
-				if (i->numberOfFrame == 33)
+				if (i->numberOfFrame == 33 && (time.asSeconds() - i->lastShootTime) > PEAS_FRAME_RATE)
 				{
-					CreateNewBullet(i, bullets, peaFrame, shoot);
+					CreateNewBullet(i, bullets, peaFrame, shoot, time.asSeconds());
 				}
 
 				ZombieShooting(bullets);
@@ -317,21 +319,23 @@ void ZombieShooting(std::vector <Bullet>& bullets)
 			if (it->pos.x > zombieForKilling[it->numberOfLine]->pos.x)
 			{
 				zombieForKilling[it->numberOfLine]->health -= 1;
+                std::cout << zombieForKilling[it->numberOfLine]->health << std::endl;
 				it = bullets.erase(it);
 				if (it == bullets.end())
-				{
 					break;
-				}
+
 			}
 		}
 	}
 }
 
-void CreateNewBullet(std::vector <Peas>::iterator i, vector <Bullet>& bullets, Frame& peaFrame, sf::Sound& shoot)
+void CreateNewBullet(std::vector <Peas>::iterator i, vector <Bullet>& bullets, Frame& peaFrame, sf::Sound& shoot, float time)
 {
-	bullets.push_back(Bullet(i->pos.x+55, i->pos.y+12, "pea.png", BULLET_SPEED, i->numberOfLine));
+    Bullet bul(i->pos.x+55, i->pos.y+12, "pea.png", BULLET_SPEED, i->numberOfLine);
+	bullets.push_back(bul);
 	bullets.back().sprite.setTexture(peaFrame.texture);
 	bullets.back().sprite.setScale(0.25, 0.25);
+    i->lastShootTime = time;
     
     shoot.play();
 }
