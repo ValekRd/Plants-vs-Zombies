@@ -38,6 +38,8 @@ Zombie::Zombie(float x, float y, std::string filename, sf::Vector2f speed, float
 	this->numberOfFrame = 0;
 	this->lastUpdateTime = 0;
 	this->numberOfLine = numberOfLine;
+	this->status = 0;
+	this->lastEatingTime = 0;
 };
 Sunflower::Sunflower(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)
 {

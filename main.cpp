@@ -55,6 +55,10 @@ void CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, s
 
 void NutMoveWithMouse(std::vector <Nut>& nuts, sf::Vector2i mousePosition);
 
+void CallEat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases);
+
+void Eat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases, float time);
+
 int Sun::score = 10000;
 float Sun::lastCreateTime = 0;
 float Nut::lastCreateTime = 0;
@@ -66,63 +70,56 @@ static std::vector <Zombie>::iterator zombieForKilling[5];
 
 int main()
 {
-	for (int i = 0; i < 5; i++) callShoot[i] = 0;
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "My Plants VS Zombies");
 	Object background(0, 0, "fone.png", NULL_SPEED);
 	Object topPanel(TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
 	std::vector <Frame> sunflowerFrames(0);
 	std::vector <Frame> zombieFrames(0);
+	std::vector <Frame> zombieEatFrames(0);
+	std::vector <Frame> zombieDieFrames(0);
 	std::vector <Frame> peasFrames(0);
-    std::vector <Frame> peasFramesIdle(0);
-    std::vector <Frame> NutFrames(0);
+	std::vector <Frame> peasFramesIdle(0);
+	std::vector <Frame> NutFrames(0);
 	std::vector <Bullet> bullets;
-	//Frame bulletFrame("pea.png");
 	Frame sunFrame("sun.png");
 	Frame peaFrame("pea.png");
 	Download(sunflowerFrames, NUM_OF_SUNFLOWER_FRAMES, "sunFlower");
 	Download(zombieFrames, NUM_OF_ZOMBIE_FRAMES, "zombie");
+	Download(zombieEatFrames, NUM_OF_ZOMBIE_EAT_FRAMES, "zombieEat");
+	Download(zombieDieFrames, NUM_OF_ZOMBIE_DIE_FRAMES, "zombieDie");
 	Download(peasFrames, NUM_OF_PEAS_FRAMES, "peas");
-    Download(peasFramesIdle, NUM_OF_PEAS_FRAMES, "peasIdle");
-    Download(NutFrames, NUM_OF_NUT_FRAMES, "nut");
-    
-    
-    ////////////////////SCORE///////////
-    sf::Font font;
-    font.loadFromFile("images/fonts/font.ttf");
-    sf::Text score("", font, 22);
-    //score.setFillColor(sf::Color::Black);
-	//score.setFillColor(sf::Color::Black);
-    score.setString("0");
-    score.setStyle(sf::Text::Bold);
-    score.setPosition(266, 59);
-    ////////////////////END_SCORE///////
-    
-    
-    //////////MUSIC////////////////
-    sf::Music music;
-    sf::Music losemusic;
-    music.openFromFile("music/gamemusic.ogg");
-    losemusic.openFromFile("music/losemusic.ogg");
-    music.setVolume(40);
-    music.play();
-    music.setLoop(true);
-    ///////////END_MUSIC//////////
-    
-    
-    ////////////SOUND///////////
-    sf::SoundBuffer plantBuffer;
-    sf::SoundBuffer sunBuffer;
-    sf::SoundBuffer shootBuffer;
-    plantBuffer.loadFromFile("music/plant.ogg");
-    sunBuffer.loadFromFile("music/points.ogg");
-    shootBuffer.loadFromFile("music/shoot.ogg");
-    sf::Sound plant(plantBuffer);
-    sf::Sound getSun(sunBuffer);
-    sf::Sound shoot(shootBuffer);
-    /////////////END_SOUND///////
-    
+	Download(peasFramesIdle, NUM_OF_PEAS_FRAMES, "peasIdle");
+	Download(NutFrames, NUM_OF_NUT_FRAMES, "nut");
 
-	sf::Clock clock;
+	//SCORE:
+	sf::Font font;
+	font.loadFromFile("images/fonts/font.ttf");
+	sf::Text score("", font, 22);
+	score.setColor(sf::Color::Black);
+	score.setColor(sf::Color::Black);
+	score.setString("0");
+	score.setStyle(sf::Text::Bold);
+	score.setPosition(266, 59);
+	//MUSIC:
+	sf::Music music;
+	sf::Music losemusic;
+	music.openFromFile("music/gamemusic.ogg");
+	losemusic.openFromFile("music/losemusic.ogg");
+	music.setVolume(40);
+	music.play();
+	music.setLoop(true);
+    //SOUND:
+	sf::SoundBuffer plantBuffer;
+	sf::SoundBuffer sunBuffer;
+	sf::SoundBuffer shootBuffer;
+	plantBuffer.loadFromFile("music/plant.ogg");
+	sunBuffer.loadFromFile("music/points.ogg");
+	shootBuffer.loadFromFile("music/shoot.ogg");
+	sf::Sound plant(plantBuffer);
+	sf::Sound getSun(sunBuffer);
+	sf::Sound shoot(shootBuffer);
+
+    sf::Clock clock;
 	std::vector <Sun> suns;
 	std::vector <Zombie> zombies;
 	std::vector <Sunflower> sunflowers;
@@ -130,17 +127,15 @@ int main()
     std::vector <Nut> nuts;
 	while (window.isOpen())
 	{
-        
-        
-		sf::Time time = clock.getElapsedTime();
+        sf::Time time = clock.getElapsedTime();
+		sf::Event event;
 		window.draw(background.sprite);
 		window.draw(topPanel.sprite);
+
 		CreateNewFreeSun(suns, time.asSeconds(), sunFrame);
 		CreateNewZombie(zombies, time.asSeconds());
 		CallShoot(zombies);
 		
-
-		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -157,6 +152,7 @@ int main()
                 PlantingNut(nuts, mousePosition, time.asSeconds(), plant);
 			}
 		}
+
 		SunflowerMoveWithMouse(sunflowers, sf::Mouse::getPosition(window));
 		PeasMoveWithMouse(peases, sf::Mouse::getPosition(window));
         NutMoveWithMouse(nuts, sf::Mouse::getPosition(window));
@@ -164,14 +160,25 @@ int main()
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapFrame(i, zombieFrames, time.asSeconds(), ZOMBIE_FRAME_RATE);
-			i->update(dt);
-			if (i->health == 0)
+			CallEat(i, peases);
+			
+			if (i->status == 0)
 			{
-				i = zombies.erase(i);
-				if (i == zombies.end() - 1) 
-					break;
+				SwapFrame(i, zombieFrames, time.asSeconds(), ZOMBIE_FRAME_RATE);
 			}
+	
+			if (i->status == 1)
+			{
+				SwapFrame(i, zombieEatFrames, time.asSeconds(), ZOMBIE_FRAME_RATE); 
+				Eat(i, peases, time.asSeconds());
+			}
+			i->update(dt);
+			/*if (i->health == 0)
+			{
+				//i = zombies.erase(i);
+				//if (i == zombies.end()) 
+				//	break;
+			}*/
 
             //CheckGameEnd (i, window, music, losemusic);
             
@@ -191,7 +198,7 @@ int main()
 				SwapFrame(i, peasFrames, time.asSeconds(), PEAS_FRAME_RATE);
 				if (i->numberOfFrame == 33 && (time.asSeconds() - i->lastShootTime) > PEAS_FRAME_RATE)
 				{
-					CreateNewBullet(i, bullets, peaFrame, shoot, time.asSeconds());
+					//CreateNewBullet(i, bullets, peaFrame, shoot, time.asSeconds());
 				}
 
 				ZombieShooting(bullets);
@@ -205,10 +212,7 @@ int main()
         for (auto i = nuts.begin(); i != nuts.end(); i++)
         {
             window.draw(i->sprite);
-        }
-
-		cout << bullets.size() << endl;
-        
+        }       
 		for (auto i = bullets.begin(); i != bullets.end(); i++)
 		{
 			window.draw(i->sprite);
@@ -232,6 +236,44 @@ int main()
 	return 0;
 }
 
+void CallEat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases)
+{
+	for (auto it = peases.begin(); it != peases.end(); it++)
+	{
+		if ( i->pos.x - it->pos.x < 30 && i->pos.x > it->pos.x && i->numberOfLine == it->numberOfLine && i->status == 0 && it->status == 1)
+		{
+			i->speed.x = 0;
+			i->status = 1;
+			i->numberOfFrame = 0;
+			
+			
+			
+			//i->numberOfFrame = 0;
+			//cout << "1 " << endl;
+		}
+	}
+}
+
+void Eat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases, float time)
+{
+	for (auto it = peases.begin(); it != peases.end(); it++)
+	{
+		if (i->numberOfFrame == 12 && (time - i->lastEatingTime > ZOMBIE_FRAME_RATE))  
+		{
+			it->health -= 1;
+			i->lastEatingTime = time;
+		}
+		
+
+		if (it->health <= 0)
+		{
+			i->status = 0;
+			i->speed = ZOMBIE_SPEED;
+			it = peases.erase(it);
+			if (it == peases.end()) break;
+		}
+	}
+}
 void NutMoveWithMouse(std::vector <Nut>& nuts, sf::Vector2i mousePosition)
 {
     mousePosition += sf::Vector2i(-30, -30);
@@ -551,4 +593,6 @@ void SwapFrame(T i, std::vector <Frame>& frames, float time, float FrameRate)
         i->lastUpdateTime = time;
     }
 }
+
+
 
