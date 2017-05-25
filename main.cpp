@@ -51,11 +51,12 @@ void ZombieShooting(std::vector <Bullet>& bullets);
 
 void AccountUpdate(sf::Text& score);
 
-void CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, sf::Music& music, sf::Music& losemusic);
+bool CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, sf::Music& music, sf::Music& losemusic);
 
 void NutMoveWithMouse(std::vector <Nut>& nuts, sf::Vector2i mousePosition);
 
 int Sun::score = 10000;
+int gameStatus = 0;
 float Sun::lastCreateTime = 0;
 float Nut::lastCreateTime = 0;
 float Zombie::lastCreateTime = 0;
@@ -72,6 +73,7 @@ int main()
 	Object topPanel(TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
 	std::vector <Frame> sunflowerFrames(0);
 	std::vector <Frame> zombieFrames(0);
+    std::vector <Frame> zombieDieFrames(0);
 	std::vector <Frame> peasFrames(0);
     std::vector <Frame> peasFramesIdle(0);
     std::vector <Frame> NutFrames(0);
@@ -84,6 +86,8 @@ int main()
 	Download(peasFrames, NUM_OF_PEAS_FRAMES, "peas");
     Download(peasFramesIdle, NUM_OF_PEAS_FRAMES, "peasIdle");
     Download(NutFrames, NUM_OF_NUT_FRAMES, "nut");
+    Download(zombieDieFrames, NUM_OF_ZOMBIE_DIE_FRAMES, "zombieDie");
+    
     
     
     ////////////////////SCORE///////////
@@ -130,8 +134,6 @@ int main()
     std::vector <Nut> nuts;
 	while (window.isOpen())
 	{
-        
-        
 		sf::Time time = clock.getElapsedTime();
 		window.draw(background.sprite);
 		window.draw(topPanel.sprite);
@@ -164,16 +166,29 @@ int main()
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
-			SwapFrame(i, zombieFrames, time.asSeconds(), ZOMBIE_FRAME_RATE);
-			i->update(dt);
-			if (i->health == 0)
+			
+            SwapFrame(i, zombieFrames, time.asSeconds(), ZOMBIE_FRAME_RATE);
+            i->update(dt);
+            
+			if (i->health <= 0)
 			{
+                i->stop();
 				i = zombies.erase(i);
-				if (i == zombies.end() - 1) 
+				if (i == zombies.end())
 					break;
 			}
 
-            //CheckGameEnd (i, window, music, losemusic);
+            if (CheckGameEnd (i, window, music, losemusic) == true)
+            {
+                if (gameStatus == 0)
+                {
+                    gameStatus = 1;
+                }
+                else if (gameStatus == 1)
+                    return 0;
+                break;
+            }
+            
             
 		}
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
@@ -207,7 +222,6 @@ int main()
             window.draw(i->sprite);
         }
 
-		cout << bullets.size() << endl;
         
 		for (auto i = bullets.begin(); i != bullets.end(); i++)
 		{
@@ -266,16 +280,16 @@ void CreateNewNut(std::vector <Nut>& nuts, sf::Vector2i mousePosition, float tim
 
 }
 
-void CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, sf::Music& music, sf::Music& losemusic)
+bool CheckGameEnd(std::vector <Zombie>::iterator i, sf::RenderWindow& window, sf::Music& music, sf::Music& losemusic)
 {
-    if (i->pos.x < 500)
+    if (i->pos.x < 100)
     {
         sf::Font FontZoombie;
         FontZoombie.loadFromFile("images/fonts/gameover.ttf");
         sf::Text gameover1("The Zombie", FontZoombie, 100);
         sf::Text gameover2("ATE YOUR BRAINS", FontZoombie, 100);
-        //gameover1.setColor(sf::Color::Black);
-        //gameover2.setColor(sf::Color::Black);
+        gameover1.setFillColor(sf::Color::Black);
+        gameover2.setFillColor(sf::Color::Black);
         gameover1.setPosition(250, 200);
         gameover2.setPosition(100, 300);
         
@@ -283,8 +297,19 @@ void CheckGameEnd (std::vector <Zombie>::iterator i, sf::RenderWindow& window, s
         window.draw(gameover2);
         
         music.stop();
-        //losemusic.play();
+        
+        if (gameStatus == 1)
+        {
+            losemusic.play();
+            while (losemusic.getStatus() == 2)
+            {}
+        }
+        
+        return true;
     }
+    
+    return false;
+    
 }
 
 void AccountUpdate(sf::Text& score)
@@ -314,7 +339,7 @@ void ZombieShooting(std::vector <Bullet>& bullets)
 		if (it->pos.x > zombieForKilling[it->numberOfLine]->pos.x)
 		{
 				zombieForKilling[it->numberOfLine]->health -= 1;
-                std::cout << zombieForKilling[it->numberOfLine]->health << std::endl;
+                //std::cout << zombieForKilling[it->numberOfLine]->health << std::endl;
 				it = bullets.erase(it);
 				if (it == bullets.end())
 					break;
@@ -515,7 +540,7 @@ void CreateNewZombie(std::vector <Zombie>& zombies, float time)
 	if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
 	{
 		int numberOfLine = rand() % 5;
-		zombies.push_back(Zombie (800, (numberOfLine+1)*GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time, numberOfLine));
+		zombies.push_back(Zombie (1024, (numberOfLine+1)*GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time, numberOfLine));
 		Zombie::lastCreateTime = time;
 	}
 }
@@ -537,6 +562,7 @@ void ClickOnSun(std::vector <Sun>& suns, sf::Vector2i mousePosition, sf::Text& s
 		}
 	}
 }
+
 
 template <typename T>
 void SwapFrame(T i, std::vector <Frame>& frames, float time, float FrameRate)

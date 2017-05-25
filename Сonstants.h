@@ -9,6 +9,7 @@ const int TOP_PANEL_POSITION_Y = 0;
 //number of frames
 const int NUM_OF_DIGIT_FRAMES = 10;
 const int NUM_OF_ZOMBIE_FRAMES = 93;
+const int NUM_OF_ZOMBIE_DIE_FRAMES = 6;
 const int NUM_OF_SUNFLOWER_FRAMES = 60;
 const int NUM_OF_PEAS_FRAMES = 60;
 const int NUM_OF_NUT_FRAMES = 3;

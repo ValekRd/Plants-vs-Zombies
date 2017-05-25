@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+
 using namespace std;
 
 class Object
@@ -36,6 +37,7 @@ public:
 	int numberOfFrame;
 	int numberOfLine;
 	Zombie(float x, float y, std::string filename, sf::Vector2f speed, float createTime, int numberOfLine);
+    void stop();
 };
 class Sunflower : public Object
 {
