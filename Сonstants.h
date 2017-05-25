@@ -6,17 +6,18 @@ const int WINDOW_SIZE_X = 1024;
 const int WINDOW_SIZE_Y = 600;
 const int TOP_PANEL_POSITION_X = 230;
 const int TOP_PANEL_POSITION_Y = 0;
-// number of frames
+//number of frames
 const int NUM_OF_DIGIT_FRAMES = 10;
 const int NUM_OF_ZOMBIE_FRAMES = 93;
 const int NUM_OF_SUNFLOWER_FRAMES = 60;
 const int NUM_OF_PEAS_FRAMES = 60;
+const int NUM_OF_NUT_FRAMES = 3;
 //times
 const float TIME_PLANTING = 0.5;
 const float FREE_FROM_ZOMBIES_TIME = 3;
 const float INTEERVAL_BETWEEN_ZOMBIE_GENERATION = 4;
-const float INTERVAL_BETWEEN_FREE_SUN_GENERATION = 4;
-const float INTERVAL_BETWEEN_SUN_GENERATION = 5;
+const float INTERVAL_BETWEEN_FREE_SUN_GENERATION = 10;
+const float INTERVAL_BETWEEN_SUN_GENERATION = 10;
 const float dt = 0.1;
 const float FREE_SUN_MOVE_TIME = 3;
 //rates
@@ -34,5 +35,6 @@ const sf::Vector2f BULLET_SPEED(2, 0);
 
 //healthes
 const int MAX_ZOMBIE_HEALTH = 5;
+const int MAX_NUT_HEALTH = 50;
 const int MAX_SUNFLOWER_HEALTH = 10;
 const int MAX_PEAS_HEALTH = 10;

@@ -48,6 +48,15 @@ Sunflower::Sunflower(float x, float y, std::string filename, sf::Vector2f speed,
 	this->lastUpdateTime = 0;
 	this->status = 0;
 }
+
+Nut::Nut(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)
+{
+    this->numberOfFrame = 0;
+    this->health = MAX_NUT_HEALTH;
+    this->plantTime = 0;
+    this->status = 0;
+}
+
 Peas::Peas(float x, float y, std::string filename, sf::Vector2f speed, float plantTime) : Object(x, y, filename, speed)
 {
 	this->numberOfFrame = 0;
@@ -63,8 +72,6 @@ Frame::Frame(string filename)
 {
 	this->texture.loadFromFile("images/" + filename);
 	this->sprite.setTexture(texture);
-	//this->sprite.setScale(0.3f, 0.3f);
-	//cout << "here" << endl;
 }
 Frame::Frame()
 {}

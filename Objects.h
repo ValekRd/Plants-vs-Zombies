@@ -63,6 +63,18 @@ public:
 	Peas(float x, float y, std::string filename, sf::Vector2f speed, float plantTime);
 };
 
+class Nut : public Object
+{
+public:
+    int status;
+    static float lastCreateTime;
+    int health;
+    int numberOfFrame;
+    float plantTime;
+    Nut(float x, float y, std::string filename, sf::Vector2f speed, float plantTime);
+};
+
+
 class Frame
 {
 public:
