@@ -157,13 +157,10 @@ int main()
                 PlantingNut(nuts, mousePosition, time.asSeconds(), plant);
 			}
 		}
-
-
 		SunflowerMoveWithMouse(sunflowers, sf::Mouse::getPosition(window));
 		PeasMoveWithMouse(peases, sf::Mouse::getPosition(window));
         NutMoveWithMouse(nuts, sf::Mouse::getPosition(window));
-        
-		
+    		
 		for (auto i = zombies.begin(); i != zombies.end(); i++)
 		{
 			window.draw(i->sprite);
@@ -171,12 +168,12 @@ int main()
 			i->update(dt);
 			if (i->health < 0)
 			{
-				cout << "here" << endl;
+				cout << i-> health << endl;
 				i = zombies.erase(i);
-				if (i == zombies.end()) break;
+				//if (i == zombies.end()) break;
 			}
             
-            CheckGameEnd (i, window, music, losemusic);
+            //CheckGameEnd (i, window, music, losemusic);
             
 		}
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
@@ -195,6 +192,7 @@ int main()
 				if (i->numberOfFrame == 33)
 				{
 					CreateNewBullet(i, bullets, peaFrame, shoot);
+					break;
 				}
 
 				ZombieShooting(bullets);
@@ -209,6 +207,8 @@ int main()
         {
             window.draw(i->sprite);
         }
+
+		cout << bullets.size() << endl;
         
 		for (auto i = bullets.begin(); i != bullets.end(); i++)
 		{
@@ -310,18 +310,16 @@ void AccountUpdate(sf::Text& score)
 
 void ZombieShooting(std::vector <Bullet>& bullets)
 {
-	if (bullets.size() > 0)
+	for (std::vector <Bullet>::iterator it = bullets.begin(); it != bullets.end(); it++)
 	{
-		for (std::vector <Bullet>::iterator it = bullets.begin(); it != bullets.end(); it++)
+		if (it->pos.x > zombieForKilling[it->numberOfLine]->pos.x)
 		{
-			if (it->pos.x > zombieForKilling[it->numberOfLine]->pos.x)
+			zombieForKilling[it->numberOfLine]->health -= 1;
+			//cout << zombieForKilling[it->numberOfLine]->health << endl;
+			it = bullets.erase(it);
+			if (it == bullets.end())
 			{
-				zombieForKilling[it->numberOfLine]->health -= 1;
-				it = bullets.erase(it);
-				if (it == bullets.end())
-				{
-					break;
-				}
+				break;
 			}
 		}
 	}
