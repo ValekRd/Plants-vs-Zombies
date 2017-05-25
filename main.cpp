@@ -98,8 +98,8 @@ int main()
 	sf::Font font;
 	font.loadFromFile("images/fonts/font.ttf");
 	sf::Text score("", font, 22);
-	score.setFillColor(sf::Color::Black);
-	score.setFillColor(sf::Color::Black);
+	score.setColor(sf::Color::Black);
+	score.setColor(sf::Color::Black);
 	score.setString("0");
 	score.setStyle(sf::Text::Bold);
 	score.setPosition(266, 59);
@@ -251,41 +251,35 @@ int main()
 	return 0;
 }
 
-void CallEat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases)
+template <typename T>
+void CallEat(std::vector <Zombie>::iterator i, T& vec)
 {
-	for (auto it = peases.begin(); it != peases.end(); it++)
+	for (auto it = vec.begin(); it != vec.end(); it++)
 	{
-		if ( i->pos.x - it->pos.x < 30 && i->pos.x > it->pos.x && i->numberOfLine == it->numberOfLine && i->status == 0 && it->status == 1)
+		if (i->pos.x - it->pos.x < 30 && i->pos.x > it->pos.x && i->numberOfLine == it->numberOfLine && i->status == 0 && it->status == 1)
 		{
 			i->speed.x = 0;
 			i->status = 1;
 			i->numberOfFrame = 0;
-			
-			
-			
-			//i->numberOfFrame = 0;
-			//cout << "1 " << endl;
 		}
 	}
 }
-
-void Eat(std::vector <Zombie>::iterator i, std::vector <Peas>& peases, float time)
+template <typename T>
+void Eat(std::vector <Zombie>::iterator i, T& vec, float time)
 {
-	for (auto it = peases.begin(); it != peases.end(); it++)
+	for (auto it = vec.begin(); it != vec.end(); it++)
 	{
 		if (i->numberOfFrame == 12 && (time - i->lastEatingTime > ZOMBIE_FRAME_RATE))  
 		{
 			it->health -= 1;
 			i->lastEatingTime = time;
 		}
-		
-
 		if (it->health <= 0)
 		{
 			i->status = 0;
 			i->speed = ZOMBIE_SPEED;
-			it = peases.erase(it);
-			if (it == peases.end()) break;
+			it = vec.erase(it);
+			if (it == vec.end()) break;
 		}
 	}
 }
@@ -331,8 +325,8 @@ bool CheckGameEnd(std::vector <Zombie>::iterator i, sf::RenderWindow& window, sf
         FontZoombie.loadFromFile("images/fonts/gameover.ttf");
         sf::Text gameover1("The Zombie", FontZoombie, 100);
         sf::Text gameover2("ATE YOUR BRAINS", FontZoombie, 100);
-        gameover1.setFillColor(sf::Color::Black);
-        gameover2.setFillColor(sf::Color::Black);
+        gameover1.setColor(sf::Color::Black);
+        gameover2.setColor(sf::Color::Black);
         gameover1.setPosition(250, 200);
         gameover2.setPosition(100, 300);
         
