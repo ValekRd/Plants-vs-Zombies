@@ -15,11 +15,12 @@
 template <typename T>
 void SwapFrame(T i, std::vector <Frame>& frames, float time, float FrameRate);
 
+void CreateNewZombie(std::vector <Zombie>& zombies, float time);
+
 void Download(std::vector <Frame>& frames, int count, std::string nameOfFrameType);
 
 void CreateNewFreeSun(std::vector <Sun>& suns, float time, Frame& sunFrame);
 
-void CreateNewZombie(std::vector <Zombie>& zombies, float time);
 
 void CreateNewSunflower(std::vector <Sunflower>& sunflowers, sf::Vector2i mousePosition, float time, Frame& sunflowerFrame, sf::Text& score);
 
@@ -59,12 +60,12 @@ template <typename T>
 void CallEat(std::vector <Zombie>::iterator i, T& vec);
 
 
-int Sun::score = 10000;
-int gameStatus = 0;
-float Sun::lastCreateTime = 0;
-float Nut::lastCreateTime = 0;
-float Zombie::lastCreateTime = 0;
-float Peas::lastCreateTime = 0;
+int Sun::score                  = 0;
+int gameStatus                  = 0;
+float Sun::lastCreateTime       = 0;
+float Nut::lastCreateTime       = 0;
+float Zombie::lastCreateTime    = 0;
+float Peas::lastCreateTime      = 0;
 float Sunflower::lastCreateTime = 0;
 static int callShoot[5];
 static std::vector <Zombie>::iterator zombieForKilling[5];
@@ -74,6 +75,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "My Plants VS Zombies");
 	Object background(0, 0, "fone.png", NULL_SPEED);
 	Object topPanel(TOP_PANEL_POSITION_X, TOP_PANEL_POSITION_Y, "top_panel.png", NULL_SPEED);
+    
 	std::vector <Frame> sunflowerFrames(0);
 	std::vector <Frame> zombieFrames(0);
     std::vector <Frame> zombieDieFrames(0);
@@ -82,16 +84,18 @@ int main()
 	std::vector <Frame> peasFramesIdle(0);
 	std::vector <Frame> NutFrames(0);
 	std::vector <Bullet> bullets;
+    
 	Frame sunFrame("sun.png");
 	Frame peaFrame("pea.png");
-	Download(sunflowerFrames, NUM_OF_SUNFLOWER_FRAMES, "sunFlower");
-	Download(zombieFrames, NUM_OF_ZOMBIE_FRAMES, "zombie");
-	Download(zombieEatFrames, NUM_OF_ZOMBIE_EAT_FRAMES, "zombieEat1");
-	Download(zombieDieFrames, NUM_OF_ZOMBIE_DIE_FRAMES, "zombieDie");
-	Download(peasFrames, NUM_OF_PEAS_FRAMES, "peas");
-    Download(peasFramesIdle, NUM_OF_PEAS_FRAMES, "peasIdle");
-    Download(NutFrames, NUM_OF_NUT_FRAMES, "nut");
-    Download(zombieDieFrames, NUM_OF_ZOMBIE_DIE_FRAMES, "zombieDie");
+    
+	Download(sunflowerFrames,   NUM_OF_SUNFLOWER_FRAMES,    "sunFlower");
+	Download(zombieFrames,      NUM_OF_ZOMBIE_FRAMES,       "zombie");
+	Download(zombieEatFrames,   NUM_OF_ZOMBIE_EAT_FRAMES,   "zombieEat1");
+	Download(zombieDieFrames,   NUM_OF_ZOMBIE_DIE_FRAMES,   "zombieDie");
+	Download(peasFrames,        NUM_OF_PEAS_FRAMES,         "peas");
+    Download(peasFramesIdle,    NUM_OF_PEAS_FRAMES,         "peasIdle");
+    Download(NutFrames,         NUM_OF_NUT_FRAMES,          "nut");
+    Download(zombieDieFrames,   NUM_OF_ZOMBIE_DIE_FRAMES,   "zombieDie");
 
 
 	//SCORE:
@@ -103,6 +107,7 @@ int main()
 	score.setString("0");
 	score.setStyle(sf::Text::Bold);
 	score.setPosition(266, 59);
+    
 	//MUSIC:
 	sf::Music music;
 	sf::Music losemusic;
@@ -111,17 +116,20 @@ int main()
 	music.setVolume(40);
 	music.play();
 	music.setLoop(true);
+    
     //SOUND:
 	sf::SoundBuffer plantBuffer;
 	sf::SoundBuffer sunBuffer;
 	sf::SoundBuffer shootBuffer;
     sf::SoundBuffer chompBuffer;
     sf::SoundBuffer kernelpultBuffer;
+    
 	plantBuffer.loadFromFile("music/plant.ogg");
 	sunBuffer.loadFromFile("music/points.ogg");
 	shootBuffer.loadFromFile("music/shoot.ogg");
     chompBuffer.loadFromFile("music/chomp.ogg");
     kernelpultBuffer.loadFromFile("music/kernelpult.ogg");
+    
 	sf::Sound plant(plantBuffer);
 	sf::Sound getSun(sunBuffer);
 	sf::Sound shoot(shootBuffer);
@@ -134,6 +142,7 @@ int main()
 	std::vector <Sunflower> sunflowers;
 	std::vector <Peas> peases;
     std::vector <Nut> nuts;
+    
 	while (window.isOpen())
 	{
 		
@@ -205,6 +214,7 @@ int main()
             }
             
 		}
+        
 		for (auto i = sunflowers.begin(); i != sunflowers.end(); i++)
 		{
 			window.draw(i->sprite);
@@ -240,10 +250,8 @@ int main()
 			window.draw(i->sprite);
 			i->update(dt);
 		}
-
-        ///////////////////////SCORE/////////
+        
         window.draw(score);
-        ///////////END_SCORE/////////////////
 		
 		for (auto i = suns.begin(); i != suns.end(); i++)
 		{
@@ -256,6 +264,16 @@ int main()
 	}
 
 	return 0;
+}
+
+void CreateNewZombie(std::vector <Zombie>& zombies, float time)
+{
+    if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
+    {
+        int numberOfLine = rand() % 5;
+        zombies.push_back(Zombie (1024, (numberOfLine+1)*GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time, numberOfLine));
+        Zombie::lastCreateTime = time;
+    }
 }
 
 template <typename T>
@@ -278,7 +296,6 @@ void CallEat(std::vector <Zombie>::iterator i, T& vec)
 			i->speed.x = 0;
 			i->status = 1;
 			i->numberOfFrame = 0;
-			//cout << 1 << endl;
 		}
 	}
 }
@@ -288,15 +305,17 @@ void Eat(std::vector <Zombie>::iterator i, T& vec, float time, sf::Sound& chomp)
 {
 	for (auto it = vec.begin(); it != vec.end(); it++)
 	{
-		if (i->numberOfFrame == 12 && (time - i->lastEatingTime > ZOMBIE_FRAME_RATE))  
+        
+		if (i->numberOfFrame == 12 && (time - i->lastEatingTime > ZOMBIE_FRAME_RATE) && (i->pos.x - it->pos.x) < 35 && abs(i->pos.y + 50 - it->pos.y) < 15)
 		{
+        
 			it->health -= 1;
             
             chomp.play();
             
 			i->lastEatingTime = time;
 		}
-		if (it->health <= 0 && abs(it->pos.x - i->pos.x) < 30)
+		if (it->health <= 0)
 		{
 			i->status = 0;
 			i->speed = ZOMBIE_SPEED;
@@ -579,16 +598,6 @@ void Download(std::vector <Frame>& frames, int count, std::string nameOfFrameTyp
 void FreeSunStopper(std::vector<Sun>::iterator i)
 {
 	i->speed.y = 0;
-}
-
-void CreateNewZombie(std::vector <Zombie>& zombies, float time)
-{
-	if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
-	{
-		int numberOfLine = rand() % 5;
-		zombies.push_back(Zombie (1024, (numberOfLine+1)*GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time, numberOfLine));
-		Zombie::lastCreateTime = time;
-	}
 }
 
 void ClickOnSun(std::vector <Sun>& suns, sf::Vector2i mousePosition, sf::Text& score, sf::Sound& getSun)
