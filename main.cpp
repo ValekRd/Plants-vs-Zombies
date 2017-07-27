@@ -59,8 +59,7 @@ void Eat(std::vector <Zombie>::iterator i, T& peases, float time, sf::Sound& cho
 template <typename T>
 void CallEat(std::vector <Zombie>::iterator i, T& vec);
 
-
-int Sun::score                  = 0;
+int Sun::score                  = 1000;
 int gameStatus                  = 0;
 float Sun::lastCreateTime       = 0;
 float Nut::lastCreateTime       = 0;
@@ -198,6 +197,7 @@ int main()
 			if (i->health == 0)
 			{
 				i = zombies.erase(i);
+                
 				if (i == zombies.end())
 					break;
 			}
@@ -266,9 +266,10 @@ int main()
 	return 0;
 }
 
+
 void CreateNewZombie(std::vector <Zombie>& zombies, float time)
 {
-    if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))
+    if ((time > FREE_FROM_ZOMBIES_TIME) && (time - Zombie::lastCreateTime > INTEERVAL_BETWEEN_ZOMBIE_GENERATION))  
     {
         int numberOfLine = rand() % 5;
         zombies.push_back(Zombie (1024, (numberOfLine+1)*GRID.y - 55, "zombie/0.png", ZOMBIE_SPEED, time, numberOfLine));
