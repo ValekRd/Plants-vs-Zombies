@@ -26,7 +26,7 @@ const float FREE_SUN_MOVE_TIME = 3;
 
 //rates
 const float ZOMBIE_FRAME_RATE = 0.01;
-const float SUNFLOWER_FRAME_RATE = 0.05;
+const float SUNFLOWER_FRAME_RATE = 0.005;
 const float PEAS_FRAME_RATE = 0.02;
 const float SHOOT_RATE = 0.5;
 
